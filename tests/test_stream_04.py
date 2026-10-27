@@ -117,6 +117,29 @@ class Stream04Tests(unittest.TestCase):
         flag.update(player_id="U9", team_id="U")
         self.assert_rejected(rows, "officials must not impersonate")
 
+    def test_official_must_have_the_correct_role(self):
+        for identifier, wrong_official in (("o001", "R1"), ("d002", "AR1"), ("v002", "R1")):
+            with self.subTest(identifier=identifier):
+                rows = self.load_rows()
+                next(row for row in rows if row["id"] == identifier)["official_id"] = wrong_official
+                self.assert_rejected(rows, "incorrect official role")
+
+    def test_declared_official_roles_must_be_preserved(self):
+        rows = self.load_rows()
+        rows[0]["officials"][0]["role"] = "assistant_referee"
+        self.assert_rejected(rows, "incorrect official role")
+
+    def test_official_subject_must_belong_to_the_stated_team(self):
+        rows = self.load_rows()
+        next(row for row in rows if row["id"] == "o001")["subject_team_id"] = "A"
+        self.assert_rejected(rows, "official subject/team mismatch")
+
+    def test_official_positions_must_be_explicitly_unavailable(self):
+        rows = self.load_rows()
+        next(row for row in rows if row["id"] == "o001").update(
+            position_status="observed", position={"x": 50, "y": 0})
+        self.assert_rejected(rows, "official position must be null/unavailable")
+
     def test_illegal_body_part_position_breaks_offside_evidence(self):
         rows = self.load_rows()
         frame = next(row for row in rows if row["record_type"] == "tracking" and row["event_time_ms"] == 83000)

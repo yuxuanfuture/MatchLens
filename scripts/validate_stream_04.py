@@ -135,8 +135,7 @@ def _metadata_and_envelope(rows, errors):
     teams = {t.get("id"): t for t in metadata.get("teams", [])}
     _check(errors, set(teams) == {"A", "U"} and teams.get("A", {}).get("attack_direction_x") == 1 and teams.get("U", {}).get("attack_direction_x") == -1, "metadata: A/U attack directions must be +1/-1")
     _check(errors, all(metadata.get("channels", {}).get(c) == "available" for c in ("events", "event_positions", "tracking", "pressure")), "metadata: all four observation channels must be available")
-    officials = metadata.get("officials", [])
-    officials = set(officials) if isinstance(officials, dict) else {p.get("id") for p in officials if isinstance(p, dict)}
+    officials = {p.get("id"): p.get("role") for p in metadata.get("officials", []) if isinstance(p, dict)}
     _check(errors, bool(officials), "metadata: named officials are required")
     index = {}
     events = {}
@@ -184,7 +183,17 @@ def _metadata_and_envelope(rows, errors):
             if typ in OFFICIAL_EVENTS:
                 _check(errors, row.get("player_id") is None and row.get("team_id") is None, f"{identifier}: officials must not impersonate a player/team")
                 _check(errors, row.get("official_id") in officials, f"{identifier}: unknown official_id")
-                _check(errors, row.get("subject_player_id") in roster, f"{identifier}: official event needs its subject player")
+                if typ == "offside_flag":
+                    required_role = "assistant_referee"
+                elif typ == "var" and row.get("stage") in {"check_started", "evidence_ready"}:
+                    required_role = "video_assistant_referee"
+                else:
+                    required_role = "referee"
+                _check(errors, officials.get(row.get("official_id")) == required_role, f"{identifier}: incorrect official role for this event/stage")
+                subject = row.get("subject_player_id")
+                _check(errors, subject in roster, f"{identifier}: official event needs its subject player")
+                _check(errors, subject in roster and row.get("subject_team_id") == roster.get(subject, {}).get("team_id"), f"{identifier}: official subject/team mismatch")
+                _check(errors, row.get("position") is None and row.get("position_status") == "unavailable", f"{identifier}: official position must be null/unavailable")
             else:
                 player = row.get("player_id")
                 _check(errors, player in roster and row.get("team_id") == roster.get(player, {}).get("team_id"), f"{identifier}: actor/team mismatch")
