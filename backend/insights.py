@@ -6,7 +6,7 @@ Numbers, coordinates and overlays always come from deterministic tools.
 import hashlib
 import json
 from backend.i18n import LANGUAGES, text, display_name
-from backend.review_state import review_state, confirmed_goal_cues
+from backend.review_state import review_state, confirmed_goal_cues, presentation_evidence
 
 
 DEFAULTS = {"language": "zh", "mode": "fan", "role": "fan", "focus_team": "A",
@@ -171,9 +171,9 @@ def publish(tools, prefs=None, playback=None):
             **({'playback': playback} if playback else {}),
             'review': review,
             "state": state, "story": story, "facts": facts, "focus": focus, "pass_quality": quality,
-            "tracking": latest if tracking_ok else None, "tracking_available": tracking_ok,
+            "tracking": presentation_evidence([latest], review)[0] if tracking_ok else None, "tracking_available": tracking_ok,
             "overlays": overlays, "events": events[-40:],
-            "evidence_records": tools.get_evidence(refs)["records"] if refs else [],
+            "evidence_records": presentation_evidence(tools.get_evidence(refs)["records"], review) if refs else [],
             "pipeline": ["ingest", "interpret", "explain", "render", "personalize"],
             "model_calls": 0}
 

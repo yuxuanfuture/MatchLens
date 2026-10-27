@@ -26,6 +26,7 @@ from backend.ingestion import validate_record, validate_stream
 from backend.video_jobs import VideoJobs
 from backend.i18n import text as localized_text
 from backend.replay_clock import replay_clock, playback_view
+from backend.review_state import review_state, presentation_evidence
 
 ROOT = Path(__file__).resolve().parents[1]
 STREAMS = {"stream-01": "Observation 01", "stream-02": "Observation 02",
@@ -257,7 +258,7 @@ class Session:
                     result["agent_usage"] = model["usage"]
                     result["agent_claims"] = model["claims"]
                     result["agent_facts"] = model.get("facts", {})
-                    result["evidence_records"] = self.store.snapshot(self.at, False).get_evidence(refs[:40])["records"] if refs else []
+                    result["evidence_records"] = presentation_evidence(self.store.snapshot(self.at, False).get_evidence(refs[:40])["records"], result['review']) if refs else []
                 self.sequence += 1
                 self.cache, self.cache_key = result, key
                 if self.journal:
@@ -359,6 +360,11 @@ class AppServer(ThreadingHTTPServer):
 
 
 class Handler(SimpleHTTPRequestHandler):
+    def end_headers(self):
+        if not self.path.startswith('/api/'):
+            self.send_header('Cache-Control', 'no-cache')
+        super().end_headers()
+
     def log_message(self, format, *args):
         pass
 
@@ -404,7 +410,10 @@ class Handler(SimpleHTTPRequestHandler):
                 return self.send_json(session.make_recap())
             if path.path == "/api/evidence":
                 with session.lock:
-                    return self.send_json(session.store.snapshot(session.at, False).get_evidence(query.get("id", [])))
+                    snapshot = session.store.snapshot(session.at, False)
+                    result = snapshot.get_evidence(query.get('id', []))
+                    result['records'] = presentation_evidence(result['records'], review_state(snapshot._records))
+                    return self.send_json(result)
             if path.path == "/api/stream":
                 self.send_response(200)
                 self.send_header("Content-Type", "text/event-stream")

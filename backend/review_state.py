@@ -25,14 +25,23 @@ def review_state(records):
         elif kind == 'var':
             phase = VAR_PHASES.get(event.get('stage'))
         if phase is not None:
-            state.update(phase=phase, subject_player_id=event.get('subject_player_id') or event.get('player_id'),
+            state.update(phase=phase, event_id=event['id'], subject_player_id=event.get('subject_player_id') or event.get('player_id'),
                          subject_team_id=event.get('subject_team_id') or event.get('team_id'),
                          event_time_ms=event['event_time_ms'], observed_at_ms=event['observed_at_ms'])
             state['evidence_ids'].extend([event['id'], *event.get('evidence_ids', [])])
-        if kind == 'goal' and state['phase'] == 'awarded':
-            state['evidence_ids'].append(event['id'])
-    state['evidence_ids'] = list(dict.fromkeys(i for i in state['evidence_ids'] if i in visible))
+    confirmations = [e['id'] for e in events if state['phase'] == 'awarded'
+                     and e['type'] == 'goal' and e.get('decision_id') in state['evidence_ids']]
+    refs = [*confirmations, state.get('event_id'), *state['evidence_ids']]
+    state['evidence_ids'] = list(dict.fromkeys(i for i in refs if i in visible))
     return state
+
+
+def presentation_evidence(records, review):
+    """Keep body-part review details behind the received review reference in UI."""
+    allowed = set(review['evidence_ids'])
+    return [{k: v for k, v in record.items() if k != 'body_parts'}
+            if 'body_parts' in record and record['id'] not in allowed else record
+            for record in records]
 
 
 def confirmed_goal_cues(records, as_of_ms, playback=None):

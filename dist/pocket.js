@@ -1,8 +1,8 @@
 import { clamp } from './matches.js';
 import {t, language, applyTranslations, errorText, displayName} from './i18n.js';
 import { LiveClient, toSnapshot } from './live-client.js';
-import { StadiumRenderer } from './pocket-renderer.js';
-import { REPLAY_STREAMS, playbackView, receiveTime } from './replay-view.js';
+import { StadiumRenderer } from './pocket-renderer.js?v=football';
+import { REPLAY_STREAMS, playbackView, receiveTime, evidenceVisible } from './replay-view.js';
 
 const $ = id => document.getElementById(id);
 const moduleNames = ['slogan','commentary','notebook'];
@@ -25,6 +25,8 @@ const renderer = new StadiumRenderer($('stadium'));
 const client=new LiveClient(value=>{payload=value;state.time=playbackView(value).position_ms/1000;state.playing=value.playing;updateUI();},message=>toast(message),{translate:t});
 function audiencePrefs(){return {...audience,mode:state.mode,role:state.role};}
 let previousFrame=performance.now(),lastContent='',lastClock='',toastTimer,drag=null,zIndex=1;
+let evidenceScope='',evidenceRequest=0;
+function clearEvidence(){evidenceRequest++;$('raw-evidence').textContent='';}
 
 function preset(role,mode) {
   return {
@@ -75,8 +77,8 @@ function setArranging(value) {state.arranging=value;document.body.classList.togg
 function closePanel(name,restore=false) {$(name+'-panel').hidden=true;$(name==='layout'?'arrange-button':'evidence-button').setAttribute('aria-expanded','false');if(restore)$(name==='layout'?'arrange-button':'evidence-button').focus();}
 function openPanel(name) {closePanel(name==='layout'?'evidence':'layout');$(name+'-panel').hidden=false;$(name==='layout'?'arrange-button':'evidence-button').setAttribute('aria-expanded','true');$('close-'+name).focus();if(name==='evidence')updateEvidence();}
 function setPlaying(value){client.control({playing:value});}
-function seek(time){client.control({seek_ms:receiveTime(payload,time)});}
-async function setScene(id){if(audience.focus_player&&!/^[AU]\d+$/.test(audience.focus_player))audience.focus_player=null;state.scene=id;payload=null;lastContent='';try{await client.open(id,audiencePrefs());for(const button of document.querySelectorAll('[data-scene]'))button.setAttribute('aria-pressed',String(button.dataset.scene===id));announce(t('toast.scene',{stream:id}));}catch(error){toast(errorText(error));$('runtime-status').textContent=t('error.connection');}}
+function seek(time){clearEvidence();client.control({seek_ms:receiveTime(payload,time)});}
+async function setScene(id){if(audience.focus_player&&!/^[AU]\d+$/.test(audience.focus_player))audience.focus_player=null;clearEvidence();state.scene=id;payload=null;lastContent='';try{await client.open(id,audiencePrefs());for(const button of document.querySelectorAll('[data-scene]'))button.setAttribute('aria-pressed',String(button.dataset.scene===id));announce(t('toast.scene',{stream:id}));}catch(error){toast(errorText(error));$('runtime-status').textContent=t('error.connection');}}
 function updateEvidence() {
   if(!payload)return;
   const records=[...new Map([...payload.events,...payload.evidence_records].map(e=>[e.id,e])).values()].sort((a,b)=>b.observed_at_ms-a.observed_at_ms||b.event_time_ms-a.event_time_ms);
@@ -86,7 +88,12 @@ function updateEvidence() {
     const actor=official?t('official.'+official.role):e.player_id||e.id;
     stamp.textContent=clock(payload.state.match_clock_start_ms+e.event_time_ms);title.textContent=`${t('event.'+(e.type||e.record_type))} · ${actor}`;detail.textContent=`${e.id} · ${e.position?`(${e.position.x}, ${e.position.y}) m`:t('ui.position_unavailable')}`;
     if(e.official_id||e.type==='goal')detail.textContent+=' · '+t('ui.received_at',{clock:clock(payload.state.match_clock_start_ms+e.observed_at_ms-playbackView(payload).receive_offset_ms)});
-    button.append(stamp,title,detail);button.addEventListener('click',async()=>{try{const result=await client.evidence([e.id]);$('raw-evidence').textContent=JSON.stringify(result.records[0],null,2);}catch(error){toast(errorText(error));}});li.append(button);return li;
+    button.append(stamp,title,detail);button.addEventListener('click',async()=>{
+      if(!payload)return;
+      const requested={session_id:payload.session_id,epoch:payload.epoch},request=++evidenceRequest;
+      try{const result=await client.evidence([e.id]);if(request===evidenceRequest&&evidenceVisible(result.records[0],payload,requested))$('raw-evidence').textContent=JSON.stringify(result.records[0],null,2);}
+      catch(error){if(request===evidenceRequest)toast(errorText(error));}
+    });li.append(button);return li;
   }));
 }
 function clock(ms){return `${String(Math.floor(ms/60000)).padStart(2,'0')}:${String(Math.floor(ms/1000)%60).padStart(2,'0')}`;}
@@ -96,6 +103,8 @@ function updateHeadings() {
 }
 function updateUI() {
   if(!payload)return toSnapshot(null);
+  const scope=`${payload.session_id}:${payload.epoch}`;
+  if(scope!==evidenceScope){evidenceScope=scope;clearEvidence();}
   const {story,state:match,facts,focus,pass_quality:quality}=payload;
   const view=playbackView(payload),phase=payload.review?.phase||'none';
   for(const team of match.teams){$(team.id==='A'?'team-a':'team-u').textContent=displayName(team.name);const option=$('team-select').querySelector(`option[value="${team.id}"]`);if(option)option.textContent=displayName(team.name);}

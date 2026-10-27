@@ -2,9 +2,11 @@
 import unittest
 import copy
 import json
+import threading
+import urllib.request
 from pathlib import Path
 
-from backend.server import Session
+from backend.server import Session, AppServer
 from backend.ingestion import validate_stream, validate_record
 from backend.overlay import overlay_packet
 
@@ -37,6 +39,8 @@ class Stream04UITests(unittest.TestCase):
                 self.assertEqual(data['review']['phase'], phase)
                 self.assertEqual(data['state']['score'], {'A': 0, 'U': goals})
                 self.assertNotIn('g001', data['review']['evidence_ids'] if not goals else [])
+                if goals:
+                    self.assertIn('g001', data['review']['evidence_ids'])
 
     def test_confirmed_goal_is_fresh_and_global_in_all_languages(self):
         for language in ('zh', 'en', 'fr', 'es', 'ar'):
@@ -74,6 +78,56 @@ class Stream04UITests(unittest.TestCase):
         cue = next(c for c in packet['cues'] if c['kind'] == 'goal')
         self.assertEqual((cue['start_ms'], cue['end_ms']), (115000, 119000))
         self.assertIn('d002', cue['evidence_ids'])
+
+    def test_body_part_detail_waits_for_received_var_evidence(self):
+        session = Session('stream-04', {'focus_team': 'A', 'focus_player': 'A9', 'metric': 'speed'})
+        early = session.control({'seek_ms': 83080})
+        frame = next(r for r in early['evidence_records'] if r['id'] == 't166')
+        self.assertNotIn('body_parts', frame)
+        review = session.control({'seek_ms': 99080})
+        frame = next(r for r in review['evidence_records'] if r['id'] == 't166')
+        self.assertIn('body_parts', frame)
+
+    def test_http_evidence_rewind_and_static_cache_contract(self):
+        server = AppServer(('127.0.0.1', 0))
+        thread = threading.Thread(target=server.serve_forever, daemon=True)
+        thread.start()
+        opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+        base = f'http://127.0.0.1:{server.server_port}'
+
+        def request(path, body=None):
+            data = json.dumps(body).encode() if body is not None else None
+            req = urllib.request.Request(base+path, data, {'Content-Type': 'application/json'})
+            with opener.open(req, timeout=5) as response:
+                return json.load(response)
+
+        try:
+            with opener.open(base+'/pocket.js', timeout=5) as response:
+                self.assertEqual(response.headers['Cache-Control'], 'no-cache')
+            created = request('/api/session', {'stream': 'stream-04'})
+            sid = created['session_id']
+            request('/api/control', {'session': sid, 'seek_ms': 83080})
+            early = request('/api/evidence?session='+sid+'&id=t166')
+            self.assertNotIn('body_parts', early['records'][0])
+            request('/api/control', {'session': sid, 'seek_ms': 115080})
+            confirmed = request('/api/evidence?session='+sid+'&id=t166&id=d002')
+            self.assertIn('body_parts', confirmed['records'][0])
+            self.assertEqual(confirmed['records'][1]['outcome'], 'goal_awarded')
+        finally:
+            server.shutdown()
+            server.server_close()
+            thread.join(timeout=5)
+
+    def test_cached_model_story_cannot_bypass_review_detail_timing(self):
+        session = Session('stream-04')
+        session.control({'seek_ms': 83080})
+        fake = {'status': 'publish', 'as_of_ms': 83080, 'fan_text': 'Test',
+                'analyst_text': 'Test analysis', 'claims': [{'evidence_ids': ['t166']}],
+                'usage': {'model_calls': 0}, 'facts': {}}
+        self.assertTrue(session.model_result(session.epoch, 83080, fake))
+        data = session.payload()
+        self.assertEqual(data['mode'], 'model_harness')
+        self.assertNotIn('body_parts', data['evidence_records'][0])
 
 
 if __name__ == '__main__':

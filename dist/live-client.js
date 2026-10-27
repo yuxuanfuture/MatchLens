@@ -14,6 +14,7 @@ export function toSnapshot(payload,formatName=value=>value) {
       focused:p.player_id === payload?.preferences.focus_player};
   });
   return {live:true, sceneId:'live', scene:{events:[]}, time, players,
+    sessionId:payload?.session_id,epoch:payload?.epoch||0,playing:!!payload?.playing,
     ball:payload?.tracking?.ball ? [payload.tracking.ball.x,payload.tracking.ball.y] : null,
     overlays, goaled:!!goal, goalAt:goal?.at_ms/1000, goalTeam:goal?.team_id==='A'?'blue':'coral',
     events:payload?.events || [], phase:{}, passes:0, backwards:0};

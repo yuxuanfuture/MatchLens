@@ -15,3 +15,9 @@ export function receiveTime(payload, seconds) {
   const position=Math.min(view.duration_ms,Math.max(0,Math.round((Number(seconds)||0)*1000)));
   return position+view.receive_offset_ms;
 }
+
+export function evidenceVisible(record, current, requested) {
+  return !!(record&&current&&current.session_id===requested.session_id&&current.epoch===requested.epoch
+    &&record.match_id===current.state.match_id
+    &&Math.max(record.event_time_ms,record.observed_at_ms)<=current.as_of_ms);
+}
