@@ -1,5 +1,6 @@
 import { clamp } from './matches.js';
 import { BallRoll, drawFootball } from './football.js';
+import { PlayerFacing, drawPlayerAvatar } from './player-avatar.js';
 
 // Project the 105 × 68 metre data plane onto the four measured grass corners.
 export function makeProjection(corners) {
@@ -18,6 +19,7 @@ export class StadiumRenderer {
   constructor(canvas) {
     this.canvas=canvas;this.ctx=canvas.getContext('2d');this.blend=0;this.reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
     this.ballRoll=new BallRoll();
+    this.playerFacing=new PlayerFacing();
     matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change',event=>{this.reduced=event.matches;});
     this.resize();new ResizeObserver(()=>this.resize()).observe(canvas);
   }
@@ -75,6 +77,7 @@ export class StadiumRenderer {
     }
     for(const e of snapshot.scene.events){if((e.type==='pass'||e.type==='shot')&&e.from&&e.to){const progress=clamp((snapshot.time-(e.at-2))/2);if(progress>0)this.route(e.from,e.to,progress);}}
     const ordered=snapshot.players.map(p=>({...p,screen:this.project(p.x,p.y)})).sort((a,b)=>a.screen[1]-b.screen[1]);
+    this.playerFacing.update(snapshot,delta,this.reduced);
     for(const player of ordered)this.player(player,snapshot);
     const ballSize=Math.max(6.5,9*this.scale);
     const roll=this.ballRoll.advance(snapshot,this.project,ballSize,this.reduced);
@@ -90,9 +93,8 @@ export class StadiumRenderer {
     const drop=player.drop*85*this.scale;
     ctx.fillStyle='#203e3533';ctx.beginPath();ctx.ellipse(x,y+1,size*.21,size*.065,0,0,Math.PI*2);ctx.fill();
     if(this.blend>.1){ctx.globalAlpha=this.blend*.85;ctx.strokeStyle=player.team==='blue'?'#9aeeff':'#ffc5a2';ctx.lineWidth=1.4;ctx.beginPath();ctx.ellipse(x,y,size*.25,size*.1,0,0,Math.PI*2);ctx.stroke();ctx.globalAlpha=1;}
-    ctx.drawImage(player.team==='blue'?this.blue:this.coral,x-size*.5,y-size+bob-bounce-drop,size,size);
-    ctx.font=`900 ${Math.max(7,10.3*this.scale)}px Nunito, sans-serif`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.strokeStyle=player.team==='blue'?'#1c6795':'#a03922';ctx.lineWidth=2.2*this.scale;
-    const numberY=y-size*.43+bob-bounce-drop;ctx.strokeText(String(player.number),x-size*.012,numberY);ctx.fillStyle='#fff';ctx.fillText(String(player.number),x-size*.012,numberY);
+    drawPlayerAvatar(ctx,player,{project:this.project,angle:this.playerFacing.get(player),size,lift:bob-bounce-drop});
+    ctx.textAlign='center';ctx.textBaseline='middle';
     if(snapshot.live&&(player.focused||this.blend>.5)){
       if(player.focused){ctx.strokeStyle='#fff294';ctx.lineWidth=3;ctx.beginPath();ctx.ellipse(x,y,size*.34,size*.13,0,0,Math.PI*2);ctx.stroke();}
       ctx.font=`800 ${Math.max(9,10*this.scale)}px Nunito, sans-serif`;ctx.fillStyle='#fffbed';ctx.strokeStyle='#173f38';ctx.lineWidth=3;

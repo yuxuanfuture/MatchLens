@@ -1,7 +1,7 @@
 import { clamp } from './matches.js';
 import {t, language, applyTranslations, errorText, displayName} from './i18n.js';
 import { LiveClient, toSnapshot } from './live-client.js';
-import { StadiumRenderer } from './pocket-renderer.js?v=football';
+import { StadiumRenderer } from './pocket-renderer.js?v=ball-facing';
 import { REPLAY_STREAMS, playbackView, receiveTime, evidenceVisible } from './replay-view.js';
 
 const $ = id => document.getElementById(id);
