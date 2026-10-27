@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.2",
+  "stream": "data/streams/stream-04.jsonl",
+  "duration_ms": 120000,
+  "tracking_hz": 2,
+  "records": 319,
+  "record_types": {
+    "metadata": 1,
+    "tracking": 241,
+    "event": 77
+  },
+  "sha256": "05953a29cb6c9ee840500691f81a1625597936a55fef8248cc22dbf5f096b650"
+}

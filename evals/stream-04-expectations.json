@@ -1,0 +1,39 @@
+{
+  "purpose": "Offline assertions derived from the approved design; never supply to runtime inference.",
+  "stream": "data/streams/stream-04.jsonl",
+  "match_clock_start_ms": 5400000,
+  "duration_ms": 120000,
+  "tracking_frames": 241,
+  "pass_attempts": {"A": 13, "U": 12},
+  "completed_passes": {"A": 12, "U": 12},
+  "incomplete_pass_ids": ["e006"],
+  "successful_outfield_passers": {
+    "A": ["A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10"],
+    "U": ["U2", "U3", "U4", "U5", "U6", "U7", "U8", "U9", "U10"]
+  },
+  "counterattack_pass_ids": ["e023", "e024", "e025"],
+  "control_recovery_times_ms": [18500, 45500, 72500],
+  "shot_time_ms": 89500,
+  "ball_in_net_time_ms": 90000,
+  "offside_flag_time_ms": 90500,
+  "initial_decision_time_ms": 92000,
+  "final_decision_time_ms": 115000,
+  "final_decision_arrival_ms": 115080,
+  "checkpoints": [
+    {"as_of_ms": 90080, "official_score": {"A": 0, "U": 0}, "decision": "pending"},
+    {"as_of_ms": 92080, "official_score": {"A": 0, "U": 0}, "decision": "goal_disallowed"},
+    {"as_of_ms": 115079, "official_score": {"A": 0, "U": 0}, "decision": "goal_disallowed"},
+    {"as_of_ms": 115080, "official_score": {"A": 0, "U": 1}, "decision": "goal_awarded"},
+    {"as_of_ms": 120080, "official_score": {"A": 0, "U": 1}, "decision": "goal_awarded"}
+  ],
+  "offside_reference": {
+    "first_contact_ms": 83000,
+    "attacker_id": "U9",
+    "attacker_nearest_body_x": 33.6,
+    "second_last_opponent_id": "A4",
+    "second_last_opponent_nearest_body_x": 33.0,
+    "onside_margin_m": 0.6
+  },
+  "full_time": false,
+  "kickoff_within_segment": false
+}
