@@ -1,0 +1,17 @@
+export const REPLAY_STREAMS = ['stream-01','stream-02','stream-04','match-day'];
+
+export function playbackView(payload) {
+  return payload?.playback || {
+    position_ms:payload?.as_of_ms || 0,
+    duration_ms:payload?.duration_ms || 90000,
+    receive_offset_ms:0,
+    match_clock_ms:payload?.state?.match_clock_ms || 0,
+    ended:false
+  };
+}
+
+export function receiveTime(payload, seconds) {
+  const view=playbackView(payload);
+  const position=Math.min(view.duration_ms,Math.max(0,Math.round((Number(seconds)||0)*1000)));
+  return position+view.receive_offset_ms;
+}
