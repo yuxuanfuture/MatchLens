@@ -17,7 +17,8 @@ export class PlayerFacing {
       const id = playerKey(player);
       present.add(id);
       let angle = this.angles.get(id);
-      let target = angle ?? (player.team === 'blue' ? 0 : Math.PI);
+      const attackDirection = player.attackDirection ?? (player.team === 'blue' ? 1 : -1);
+      let target = angle ?? (attackDirection === -1 ? Math.PI : 0);
       if (hasPosition(snapshot.ball)) {
         const dx = snapshot.ball[0] - player.x, dy = snapshot.ball[1] - player.y;
         // A ball at the player's feet has no reliable bearing: keep the last one.

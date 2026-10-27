@@ -5,11 +5,13 @@ export function toSnapshot(payload,formatName=value=>value) {
   const overlays = payload?.overlays || [];
   const goal = overlays.find(o => o.kind === 'goal');
   const roster = new Map((payload?.state.roster || []).map(p => [p.id, p]));
+  const attackDirections = new Map((payload?.state.teams || []).map(team => [team.id,team.attack_direction_x]));
   const players = (payload?.tracking?.players || []).map(p => {
     const identity = roster.get(p.player_id);
     const substitution = overlays.find(o => o.kind === 'substitution' && o.player_id === p.player_id);
     return {id:p.player_id, name:formatName(identity?.name || p.player_id), number:identity?.shirt_number || 0,
       team:identity?.team_id === 'A' ? 'blue' : 'coral', x:p.x, y:p.y,
+      attackDirection:attackDirections.get(identity?.team_id),
       drop:substitution ? Math.max(0, 1-(payload.as_of_ms-substitution.at_ms)/2000) : 0,
       focused:p.player_id === payload?.preferences.focus_player};
   });
