@@ -1,4 +1,4 @@
-export const REPLAY_STREAMS = ['stream-01','stream-02','stream-04','match-day'];
+export const REPLAY_STREAMS = ['stream-04'];
 
 export function playbackView(payload) {
   return payload?.playback || {

@@ -20,7 +20,7 @@ const audience={language:'zh',focus_team:'A',focus_player:null,metric:'overview'
 audience.language=language();
 const streams=REPLAY_STREAMS;
 const requestedScene=new URLSearchParams(location.search).get('scene');
-const state = {scene:streams.includes(requestedScene)?requestedScene:'stream-01',time:0,playing:false,mode:preferences.mode,role:preferences.role,arranging:false};
+const state = {scene:streams.includes(requestedScene)?requestedScene:streams[0],time:0,playing:false,mode:preferences.mode,role:preferences.role,arranging:false};
 const renderer = new StadiumRenderer($('stadium'));
 const client=new LiveClient(value=>{payload=value;state.time=playbackView(value).position_ms/1000;state.playing=value.playing;updateUI();},message=>toast(message),{translate:t});
 function audiencePrefs(){return {...audience,mode:state.mode,role:state.role};}
@@ -160,7 +160,6 @@ $('edit-layout').addEventListener('click',()=>setArranging(true));$('done-arrang
 $('reset-layout').addEventListener('click',()=>{preferences.layouts[`${state.role}:${state.mode}`]=preset(state.role,state.mode);applyLayout();save();toast(t('toast.reset'));});
 $('replay-button').addEventListener('click',()=>{seek(0);setPlaying(true);});$('restart-button').addEventListener('click',()=>seek(0));
 $('play-button').addEventListener('click',()=>{if(state.time>=playbackView(payload).duration_ms/1000)seek(0);setPlaying(!state.playing);});
-$('next-button').addEventListener('click',()=>{setScene(streams[(streams.indexOf(state.scene)+1)%streams.length]);});
 $('seek').addEventListener('change',event=>{setPlaying(false);seek(event.target.value);});
 for(const button of document.querySelectorAll('[data-scene]'))button.addEventListener('click',()=>setScene(button.dataset.scene));
 document.addEventListener('keydown',event=>{if(event.key==='Escape'){if(!$('layout-panel').hidden)closePanel('layout',true);else if(!$('evidence-panel').hidden)closePanel('evidence',true);if(state.arranging){setArranging(false);$('arrange-button').focus();}}});
