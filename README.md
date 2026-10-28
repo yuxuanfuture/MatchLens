@@ -70,45 +70,7 @@ The product does not require a model to run. When the fail-closed model policy i
 explicitly enabled, the same frozen evidence tools can be used by a bounded
 multi-agent investigation system:
 
-```mermaid
-flowchart TB
-    E[Received events and tracking] --> G[Time and coverage gate]
-    G --> S[Frozen evidence snapshot]
-    S --> T[Deterministic football tools]
-
-    P[Fail-closed model policy] --> C
-    B[Model, tool, turn, and wall-clock budgets] --> C
-    T --> C
-
-    subgraph MAS[Optional bounded multi-agent system]
-        C[Coordinator]
-        SC[Scout]
-        TA[Tactics]
-        AU[Audience]
-        RC[Recap]
-        M[Shared working memory]
-        D[Candidate explanation]
-        V[Independent verifier]
-        R[Reviewed result]
-
-        C -. may delegate .-> SC
-        C -. may delegate .-> TA
-        C -. may delegate .-> AU
-        C -. may delegate .-> RC
-        SC --> M
-        TA --> M
-        AU --> M
-        RC --> M
-        M --> C
-        C --> D
-        D --> V
-        V -- reject: one revision --> C
-        V -- approve --> R
-    end
-
-    R --> O[Fan and Analyst output]
-    O --> UI[Pocket Stadium, evidence, overlay, and recap]
-```
+![MatchLens multi-agent system architecture](docs/architecture/multi-agent-system.svg)
 
 Only the coordinator may delegate. Every non-empty candidate receives an independent
 review, all numerical claims must come from deterministic tools, and results from an

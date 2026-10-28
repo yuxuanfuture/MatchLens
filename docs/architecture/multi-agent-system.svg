@@ -1,0 +1,164 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="1000" viewBox="0 0 1280 1000" role="img" aria-labelledby="title desc">
+  <title id="title">MatchLens multi-agent system architecture</title>
+  <desc id="desc">Received football events pass through time and coverage gates into frozen evidence and deterministic tools. A fail-closed, budget-limited coordinator may delegate to scout, tactics, audience, and recap agents. Shared findings become a candidate explanation that an independent verifier approves or returns for one revision. Reviewed or offline results feed the Pocket Stadium, evidence panel, and timed overlay.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#60766f"/>
+    </marker>
+    <marker id="arrow-warn" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#d67a2c"/>
+    </marker>
+    <style>
+      .canvas { fill: #f7fbf9; }
+      .frame { fill: #eef6f2; stroke: #b6c8c1; }
+      .node { fill: #ffffff; stroke: #8ca39b; }
+      .agent { fill: #f3f9e8; stroke: #8ab622; }
+      .control { fill: #fff7e9; stroke: #d99a36; }
+      .review { fill: #eaf4ff; stroke: #5791c8; }
+      .output { fill: #e9f8f1; stroke: #318568; }
+      .title { fill: #092b24; font: 700 28px Inter, ui-sans-serif, system-ui, sans-serif; }
+      .section { fill: #446059; font: 700 16px Inter, ui-sans-serif, system-ui, sans-serif; letter-spacing: 1.4px; }
+      .label { fill: #102d27; font: 700 16px Inter, ui-sans-serif, system-ui, sans-serif; }
+      .small { fill: #49635c; font: 500 13px Inter, ui-sans-serif, system-ui, sans-serif; }
+      .edge-label { fill: #5a706a; font: 600 12px Inter, ui-sans-serif, system-ui, sans-serif; }
+      .line { fill: none; stroke: #60766f; stroke-width: 2; marker-end: url(#arrow); }
+      .delegate { fill: none; stroke: #79a714; stroke-width: 2; stroke-dasharray: 7 6; marker-end: url(#arrow); }
+      .reject { fill: none; stroke: #d67a2c; stroke-width: 2; stroke-dasharray: 7 6; marker-end: url(#arrow-warn); }
+      @media (prefers-color-scheme: dark) {
+        .canvas { fill: #0b1512; }
+        .frame { fill: #12231e; stroke: #365049; }
+        .node { fill: #14211e; stroke: #607a71; }
+        .agent { fill: #1c2a15; stroke: #91b93c; }
+        .control { fill: #2a2113; stroke: #c99039; }
+        .review { fill: #122637; stroke: #5791c8; }
+        .output { fill: #123126; stroke: #46a17f; }
+        .title, .label { fill: #eef8f4; }
+        .section, .small, .edge-label { fill: #abc0b9; }
+        .line { stroke: #809b92; }
+      }
+    </style>
+  </defs>
+
+  <rect class="canvas" x="10" y="10" width="1260" height="980" rx="24"/>
+  <text class="title" x="640" y="52" text-anchor="middle">MatchLens · Evidence-Grounded Multi-Agent System</text>
+  <text class="section" x="48" y="92">EVIDENCE LAYER</text>
+
+  <rect class="node" x="40" y="112" width="250" height="74" rx="14"/>
+  <text class="label" x="165" y="142" text-anchor="middle">Received events &amp; tracking</text>
+  <text class="small" x="165" y="165" text-anchor="middle">replay or live synthetic stream</text>
+
+  <rect class="node" x="350" y="112" width="220" height="74" rx="14"/>
+  <text class="label" x="460" y="142" text-anchor="middle">Time &amp; coverage gate</text>
+  <text class="small" x="460" y="165" text-anchor="middle">no future or missing facts</text>
+
+  <rect class="node" x="630" y="112" width="230" height="74" rx="14"/>
+  <text class="label" x="745" y="142" text-anchor="middle">Frozen evidence snapshot</text>
+  <text class="small" x="745" y="165" text-anchor="middle">immutable observation window</text>
+
+  <rect class="node" x="920" y="112" width="310" height="74" rx="14"/>
+  <text class="label" x="1075" y="142" text-anchor="middle">Deterministic football tools</text>
+  <text class="small" x="1075" y="165" text-anchor="middle">metrics · events · players · evidence</text>
+
+  <path class="line" d="M290 149 H350"/>
+  <path class="line" d="M570 149 H630"/>
+  <path class="line" d="M860 149 H920"/>
+
+  <text class="section" x="350" y="244">OPTIONAL BOUNDED MULTI-AGENT SYSTEM</text>
+  <rect class="frame" x="330" y="260" width="900" height="500" rx="22"/>
+
+  <rect class="control" x="360" y="300" width="220" height="68" rx="14"/>
+  <text class="label" x="470" y="329" text-anchor="middle">Fail-closed policy</text>
+  <text class="small" x="470" y="352" text-anchor="middle">explicit provider approval</text>
+
+  <rect class="control" x="360" y="395" width="220" height="82" rx="14"/>
+  <text class="label" x="470" y="424" text-anchor="middle">Execution budgets</text>
+  <text class="small" x="470" y="447" text-anchor="middle">model · tools · turns</text>
+  <text class="small" x="470" y="466" text-anchor="middle">wall clock · request time</text>
+
+  <rect class="agent" x="660" y="300" width="240" height="78" rx="16"/>
+  <text class="label" x="780" y="333" text-anchor="middle">Coordinator</text>
+  <text class="small" x="780" y="356" text-anchor="middle">route · delegate · synthesize</text>
+
+  <path class="line" d="M580 334 H660"/>
+  <path class="line" d="M580 436 H620 V354 H660"/>
+  <path class="line" d="M1075 186 V220 H780 V300"/>
+
+  <rect class="agent" x="370" y="500" width="170" height="70" rx="14"/>
+  <text class="label" x="455" y="531" text-anchor="middle">Scout</text>
+  <text class="small" x="455" y="553" text-anchor="middle">find changes</text>
+
+  <rect class="agent" x="580" y="500" width="170" height="70" rx="14"/>
+  <text class="label" x="665" y="531" text-anchor="middle">Tactics</text>
+  <text class="small" x="665" y="553" text-anchor="middle">test patterns</text>
+
+  <rect class="agent" x="790" y="500" width="170" height="70" rx="14"/>
+  <text class="label" x="875" y="531" text-anchor="middle">Audience</text>
+  <text class="small" x="875" y="553" text-anchor="middle">adapt presentation</text>
+
+  <rect class="agent" x="1000" y="500" width="170" height="70" rx="14"/>
+  <text class="label" x="1085" y="531" text-anchor="middle">Recap</text>
+  <text class="small" x="1085" y="553" text-anchor="middle">summarize window</text>
+
+  <path class="delegate" d="M730 378 V445 H455 V500"/>
+  <path class="delegate" d="M760 378 V465 H665 V500"/>
+  <path class="delegate" d="M800 378 V465 H875 V500"/>
+  <path class="delegate" d="M830 378 V445 H1085 V500"/>
+  <text class="edge-label" x="780" y="430" text-anchor="middle">may delegate</text>
+
+  <rect class="node" x="570" y="605" width="400" height="66" rx="14"/>
+  <text class="label" x="770" y="633" text-anchor="middle">Shared working memory</text>
+  <text class="small" x="770" y="655" text-anchor="middle">computed facts and specialist reports for this observation</text>
+
+  <path class="line" d="M455 570 V588 H650 V605"/>
+  <path class="line" d="M665 570 V605"/>
+  <path class="line" d="M875 570 V605"/>
+  <path class="line" d="M1085 570 V588 H890 V605"/>
+  <path class="line" d="M770 605 V585 H1165 V339 H900"/>
+
+  <rect class="node" x="380" y="700" width="215" height="64" rx="14"/>
+  <text class="label" x="487" y="727" text-anchor="middle">Candidate explanation</text>
+  <text class="small" x="487" y="749" text-anchor="middle">claims · evidence · audiences</text>
+
+  <rect class="review" x="665" y="700" width="205" height="64" rx="14"/>
+  <text class="label" x="767" y="727" text-anchor="middle">Independent verifier</text>
+  <text class="small" x="767" y="749" text-anchor="middle">approve or reject</text>
+
+  <rect class="output" x="940" y="700" width="220" height="64" rx="14"/>
+  <text class="label" x="1050" y="727" text-anchor="middle">Reviewed result</text>
+  <text class="small" x="1050" y="749" text-anchor="middle">supported or abstained</text>
+
+  <path class="line" d="M660 378 V676 H487 V700"/>
+  <path class="line" d="M595 732 H665"/>
+  <path class="line" d="M870 732 H940"/>
+  <path class="reject" d="M767 700 V684 H1160 V339 H900"/>
+  <text class="edge-label" x="1030" y="680" text-anchor="middle">reject · one revision</text>
+
+  <rect class="node" x="40" y="320" width="230" height="72" rx="14"/>
+  <text class="label" x="155" y="350" text-anchor="middle">Offline fact publisher</text>
+  <text class="small" x="155" y="373" text-anchor="middle">default · no model required</text>
+  <path class="line" d="M1075 186 V216 H155 V320"/>
+
+  <text class="section" x="48" y="820">DELIVERY LAYER</text>
+  <rect class="output" x="430" y="790" width="420" height="72" rx="16"/>
+  <text class="label" x="640" y="820" text-anchor="middle">Evidence-linked insight contract</text>
+  <text class="small" x="640" y="843" text-anchor="middle">Fan and Analyst text · facts · cues · evidence IDs</text>
+
+  <path class="line" d="M155 392 V826 H430"/>
+  <path class="line" d="M1050 764 V780 H640 V790"/>
+
+  <rect class="node" x="120" y="905" width="280" height="62" rx="14"/>
+  <text class="label" x="260" y="932" text-anchor="middle">Pocket Stadium</text>
+  <text class="small" x="260" y="953" text-anchor="middle">Fan / Analyst interface</text>
+
+  <rect class="node" x="500" y="905" width="280" height="62" rx="14"/>
+  <text class="label" x="640" y="932" text-anchor="middle">Evidence panel</text>
+  <text class="small" x="640" y="953" text-anchor="middle">records and deterministic metrics</text>
+
+  <rect class="node" x="880" y="905" width="280" height="62" rx="14"/>
+  <text class="label" x="1020" y="932" text-anchor="middle">Timed overlay &amp; recap</text>
+  <text class="small" x="1020" y="953" text-anchor="middle">broadcast and machine-readable output</text>
+
+  <path class="line" d="M640 862 V885 H260 V905"/>
+  <path class="line" d="M640 862 V905"/>
+  <path class="line" d="M640 862 V885 H1020 V905"/>
+</svg>
