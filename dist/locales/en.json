@@ -323,5 +323,12 @@
   "official.video_assistant_referee": "VAR",
   "ui.playback_progress": "{position} / {duration}",
   "ui.received_at": "Received at {clock}",
-  "review.stopped": "Play stopped · restart pending"
+  "review.stopped": "Play stopped · restart pending",
+  "audio.on": "Crowd sound: on",
+  "audio.off": "Crowd sound: off",
+  "audio.fast": "Crowd sound: fast-forward muted",
+  "audio.loading": "Crowd sound: loading…",
+  "audio.unavailable": "Crowd sound unavailable",
+  "audio.hint": "Crowd sound follows the replay at 1×. Fast-forward is muted.",
+  "audio.credits": "Sound credits"
 }

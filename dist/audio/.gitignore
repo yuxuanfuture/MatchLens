@@ -1,0 +1,4 @@
+# Local soundtrack includes Mixkit assets; do not distribute it with source code.
+*.mp3
+*.wav
+*.ogg

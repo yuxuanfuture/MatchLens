@@ -39,3 +39,7 @@ body[data-mode=analyst] .slogan-module:not([data-size=compact]) h1{font-size:cla
 #review-status[data-phase=none],#review-status[data-phase=ended]{background:#fff8e9;border-color:#e3d8bd;color:#345c49}
 #play-state-note{margin:0 0 10px;color:#8d641f;font-size:11px;font-weight:800;line-height:1.5}
 @media(max-width:700px){#review-status{font-size:10px;max-width:85vw;padding:6px 10px}}
+
+/* Sound shares the transport controls and the current replay clock. */
+#crowd-audio-button[aria-pressed=true]{background:#e3edda;border-color:#5b806a;color:#173f31}
+#crowd-audio-button[data-audio-status=fast],#crowd-audio-button[data-audio-status=unavailable]{background:#fff0d2;color:#795523}

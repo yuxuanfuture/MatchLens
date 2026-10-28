@@ -323,5 +323,12 @@
   "official.video_assistant_referee": "VAR",
   "ui.playback_progress": "{position} / {duration}",
   "ui.received_at": "Recibido a las {clock}",
-  "review.stopped": "Juego detenido · reinicio pendiente"
+  "review.stopped": "Juego detenido · reinicio pendiente",
+  "audio.on": "Público: activado",
+  "audio.off": "Público: desactivado",
+  "audio.fast": "Público: silencio al acelerar",
+  "audio.loading": "Público: cargando…",
+  "audio.unavailable": "Sonido del público no disponible",
+  "audio.hint": "El público sigue la repetición a 1×. Se silencia al acelerar.",
+  "audio.credits": "Créditos de sonido"
 }

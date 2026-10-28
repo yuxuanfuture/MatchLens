@@ -323,5 +323,12 @@
   "official.video_assistant_referee": "حكم الفيديو",
   "ui.playback_progress": "{position} / {duration}",
   "ui.received_at": "استُلم عند {clock}",
-  "review.stopped": "اللعب متوقف · بانتظار الاستئناف"
+  "review.stopped": "اللعب متوقف · بانتظار الاستئناف",
+  "audio.on": "صوت الجمهور: مفعّل",
+  "audio.off": "صوت الجمهور: متوقف",
+  "audio.fast": "صوت الجمهور: صامت عند التسريع",
+  "audio.loading": "صوت الجمهور: جارٍ التحميل…",
+  "audio.unavailable": "صوت الجمهور غير متاح",
+  "audio.hint": "يتزامن صوت الجمهور مع الإعادة بسرعة 1× ويُكتم عند التسريع.",
+  "audio.credits": "مصادر الصوت"
 }

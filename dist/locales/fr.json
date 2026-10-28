@@ -323,5 +323,12 @@
   "official.video_assistant_referee": "VAR",
   "ui.playback_progress": "{position} / {duration}",
   "ui.received_at": "Reçu à {clock}",
-  "review.stopped": "Jeu arrêté · reprise en attente"
+  "review.stopped": "Jeu arrêté · reprise en attente",
+  "audio.on": "Public : activé",
+  "audio.off": "Public : désactivé",
+  "audio.fast": "Public : muet en accéléré",
+  "audio.loading": "Public : chargement…",
+  "audio.unavailable": "Son du public indisponible",
+  "audio.hint": "Le public suit la lecture à 1×. Le son est coupé en accéléré.",
+  "audio.credits": "Crédits sonores"
 }

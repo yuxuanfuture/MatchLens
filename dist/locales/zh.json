@@ -323,5 +323,12 @@
   "official.video_assistant_referee": "VAR",
   "ui.playback_progress": "{position} / {duration}",
   "ui.received_at": "获知于 {clock}",
-  "review.stopped": "比赛暂停 · 等待重新开球"
+  "review.stopped": "比赛暂停 · 等待重新开球",
+  "audio.on": "球迷声音：开",
+  "audio.off": "球迷声音：关",
+  "audio.fast": "球迷声音：快进静音",
+  "audio.loading": "球迷声音：加载中…",
+  "audio.unavailable": "球迷声音暂不可用",
+  "audio.hint": "球迷声音随 1× 回放同步播放，快进时静音。",
+  "audio.credits": "声音素材署名"
 }
