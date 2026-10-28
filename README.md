@@ -2,8 +2,6 @@
 
 [![CI](https://github.com/yuxuanfuture/MatchLens/actions/workflows/ci.yml/badge.svg)](https://github.com/yuxuanfuture/MatchLens/actions/workflows/ci.yml)
 
-![MatchLens Pocket Stadium title page](docs/cover/titlepage.png)
-
 https://github.com/user-attachments/assets/7c19dc86-b2b1-4d1c-8126-0246e06f65e4
 
 MatchLens turns synthetic football events into evidence-linked match intelligence
