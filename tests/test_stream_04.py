@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import math
 from pathlib import Path
 import subprocess
 import sys
@@ -35,6 +36,18 @@ class Stream04Tests(unittest.TestCase):
     def test_public_artifact_satisfies_independent_contract(self):
         errors = validate_records(self.load_rows())
         self.assertEqual(errors, [], "\n".join(errors))
+
+    def test_open_play_uses_backfield_and_both_wings_without_a_central_pile(self):
+        frame = next(row for row in self.load_rows()
+                     if row["record_type"] == "tracking" and row["event_time_ms"] == 22000)
+        players = [p for p in frame["players"] if p["player_id"] not in {"A1", "U1"}]
+        self.assertGreaterEqual(sum(p["x"] < 45 for p in players), 4)
+        self.assertGreaterEqual(sum(p["y"] < 12 for p in players), 4)
+        self.assertGreaterEqual(sum(p["y"] > 56 for p in players), 3)
+        for index, player in enumerate(players):
+            for other in players[index + 1:]:
+                self.assertGreaterEqual(math.hypot(player["x"] - other["x"], player["y"] - other["y"]),
+                                        4.5, f'{player["player_id"]}/{other["player_id"]} overlap at 90:22')
 
     def test_existing_snapshot_reader_counts_only_the_confirmed_goal(self):
         stream = FixtureStream(ARTIFACT)
