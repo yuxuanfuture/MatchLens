@@ -1,7 +1,7 @@
 {
   "stream": "stream-04",
   "duration_seconds": 120,
-  "audible_seconds": 76,
+  "audible_seconds": 86,
   "sample_rate": 48000,
   "target_rms_db": -18,
   "sources": {
@@ -9,7 +9,8 @@
     "02": {"file":"02_applause_mixkit_362.wav","label":"掌声","author":"Mixkit","url":"https://mixkit.co/free-sound-effects/sports/","license":"Mixkit Sound Effects Free License","license_url":"https://mixkit.co/license/modal/sfxFree/"},
     "04": {"file":"04_chance_missed_freesound_829452_hq-preview.mp3","label":"遗憾惊呼","author":"itmightgetloud / Philipp Feit","url":"https://freesound.org/people/itmightgetloud/sounds/829452/","license":"CC0 1.0","license_url":"https://creativecommons.org/publicdomain/zero/1.0/"},
     "05": {"file":"05_referee_dispute_freesound_263680_hq-preview.mp3","label":"判罚不满","author":"avakas","title":"Football stadium fans are not happy with the referee","url":"https://freesound.org/people/avakas/sounds/263680/","license":"CC BY 4.0","license_url":"https://creativecommons.org/licenses/by/4.0/"},
-    "07": {"file":"07_goal_freesound_829455_hq-preview.mp3","label":"进球欢呼","author":"itmightgetloud / Philipp Feit","url":"https://freesound.org/people/itmightgetloud/sounds/829455/","license":"CC0 1.0","license_url":"https://creativecommons.org/publicdomain/zero/1.0/"}
+    "07": {"file":"07_goal_freesound_829455_hq-preview.mp3","label":"进球欢呼","author":"itmightgetloud / Philipp Feit","url":"https://freesound.org/people/itmightgetloud/sounds/829455/","license":"CC0 1.0","license_url":"https://creativecommons.org/publicdomain/zero/1.0/"},
+    "06": {"file":"06_stadium_ambience_freesound_829454_hq-preview.mp3","label":"低声议论","title":"Millerntor Stadium Crowd Reaction General Ambience 01","author":"itmightgetloud / Philipp Feit","url":"https://freesound.org/people/itmightgetloud/sounds/829454/","license":"CC0 1.0","license_url":"https://creativecommons.org/publicdomain/zero/1.0/","recording_context":"德国 Millerntor 球场环境，取平稳片段作为复核期间的低声人群底音"}
   },
   "cues": [
     {"start":0,"end":12,"source":"01","in":0.4,"out":10.4,"repeat":true,"gain_from":0.40,"gain_to":0.46,"fade_in":0.6,"fade_out":0.6,"event":"A 队组织进攻","content":"中低强度的节奏助威"},
@@ -25,6 +26,7 @@
     {"start":85.5,"end":90,"source":"01","in":6,"out":10.5,"gain_from":0.70,"gain_to":0.90,"fade_in":0.06,"fade_out":0.08,"event":"单刀、过门将、射门","content":"进球前的高强度期待"},
     {"start":90,"end":92,"source":"07","in":0.6,"out":2.6,"gain_from":0.90,"gain_to":0.90,"fade_in":0.06,"fade_out":1.5,"event":"球入网，90.5 秒举旗","content":"短欢呼，举旗后迅速淡出"},
     {"start":92,"end":95,"source":"05","in":5,"out":8,"gain_from":0.68,"gain_to":0.68,"fade_in":0.12,"fade_out":0.8,"event":"暂判越位并启动 VAR","content":"不满与嘘声"},
+    {"start":104,"end":114,"source":"06","in":7,"out":17,"gain_from":0.24,"gain_to":0.26,"fade_in":1,"fade_out":2,"event":"主裁在场边观看监视器并完成复核","content":"素材 06 的平稳人群底音，轻柔进入，112–114 秒淡出"},
     {"start":115,"end":120,"source":"07","in":15,"out":20,"gain_from":1,"gain_to":1,"fade_in":0.08,"fade_out":0.5,"event":"确认进球有效","content":"完整欢呼，片段结束前淡出"}
   ]
 }

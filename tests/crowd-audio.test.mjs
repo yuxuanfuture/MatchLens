@@ -111,7 +111,7 @@ test('the confirmation cheer cannot precede the received VAR decision',async()=>
   late.player.update(snapshot(115.2));assert.equal(late.sources.at(-1).offset,115.2);
 });
 
-test('the soundtrack covers 76 seconds and waits for the actual goal confirmation',()=>{
+test('the soundtrack covers 86 seconds, includes review chatter, and waits for goal confirmation',()=>{
   const plan=JSON.parse(readFileSync(new URL('../data/stream-04-audio.json',import.meta.url)));
   const records=readFileSync(new URL('../data/streams/stream-04.jsonl',import.meta.url),'utf8').trim().split('\n').map(JSON.parse);
   const goal=records.find(row=>row.type==='goal');
@@ -119,15 +119,24 @@ test('the soundtrack covers 76 seconds and waits for the actual goal confirmatio
   assert.equal(celebrations[0].start,90);
   assert.equal(celebrations[1].start,(goal.observed_at_ms-80)/1000);
   assert.equal(celebrations[1].start,115);
-  assert.deepEqual(Object.keys(plan.sources),['01','02','04','05','07']);
+  assert.deepEqual(Object.keys(plan.sources).sort(),['01','02','04','05','06','07']);
+  const murmur=plan.cues.find(cue=>cue.source==='06');
+  const reviewStarted=records.find(row=>row.type==='var'&&row.stage==='on_field_review_started');
+  const reviewCompleted=records.find(row=>row.type==='var'&&row.stage==='on_field_review_completed');
+  assert.equal(murmur.start,(reviewStarted.observed_at_ms-80)/1000);
+  assert.equal(murmur.end,(reviewCompleted.observed_at_ms-80)/1000);
+  assert.equal(murmur.fade_out,2,'discussion fades through 112–114 seconds');
+  assert.ok(murmur.gain_from<=.3&&murmur.gain_to<=.3,'discussion stays well below the goal cheer');
   let covered=0;
   for(let tenth=0;tenth<1200;tenth++){
     const time=tenth/10+.05;
     const audible=plan.cues.some(cue=>time>=cue.start&&time<cue.end);
     if(audible)covered++;
-    if(time>=95&&time<115)assert.equal(audible,false,'VAR stays quiet');
+    if((time>=95&&time<104)||(time>=114&&time<115))assert.equal(audible,false,'quiet before review and before the final decision');
+    if(time>=104&&time<114)assert.equal(audible,true,'review has low conversation');
   }
-  assert.equal(covered,760);
+  assert.equal(covered,860);
+  assert.equal(plan.audible_seconds,86);
   assert.equal(plan.cues.find(cue=>cue.source==='04').start,72);
   assert.equal(plan.cues.find(cue=>cue.source==='05').start,92);
 });

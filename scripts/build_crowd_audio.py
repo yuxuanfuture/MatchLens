@@ -68,7 +68,7 @@ def build(source_dir, output_dir):
 
     audible_seconds = float(np.count_nonzero(coverage) / rate)
     if audible_seconds != manifest['audible_seconds']:
-        raise ValueError(f'Expected 76 audible seconds; got {audible_seconds}')
+        raise ValueError(f"Expected {manifest['audible_seconds']} audible seconds; got {audible_seconds}")
     peak = float(np.max(np.abs(mix)))
     attenuation = min(1, .89 / max(peak, 1e-9))
     mix *= attenuation
@@ -78,11 +78,18 @@ def build(source_dir, output_dir):
     decoded, decoded_rate = sf.read(destination, always_2d=True)
     if abs(len(decoded) / decoded_rate - 120) > .05:
         raise ValueError('Encoded soundtrack duration is incorrect')
-    if np.max(np.abs(decoded[round(95.1*decoded_rate):round(114.9*decoded_rate)])) > .0001:
-        raise ValueError('VAR interval must be silent')
+    for start, end in ((95.1, 103.9), (114.1, 114.9)):
+        if np.max(np.abs(decoded[round(start*decoded_rate):round(end*decoded_rate)])) > .0001:
+            raise ValueError('The gaps around the review discussion must be silent')
+    murmur = decoded[round(105*decoded_rate):round(112*decoded_rate)]
+    cheer = decoded[round(115.1*decoded_rate):round(119.4*decoded_rate)]
+    murmur_rms, cheer_rms = (float(np.sqrt(np.mean(clip*clip))) for clip in (murmur, cheer))
+    if murmur_rms < .001 or not .1 < murmur_rms / max(cheer_rms, 1e-9) < .4:
+        raise ValueError('Review discussion must be audible and quieter than the goal cheer')
     report = {'duration_seconds':len(decoded)/decoded_rate, 'audible_seconds':audible_seconds,
         'quiet_seconds':120-audible_seconds, 'decoded_peak':float(np.max(np.abs(decoded))),
         'mix_attenuation':attenuation, 'sources':source_info,
+        'murmur_to_cheer_db':float(20*np.log10(murmur_rms/cheer_rms)),
         'output_bytes':destination.stat().st_size, 'output_sha256':hashlib.sha256(destination.read_bytes()).hexdigest()}
     report_path = ROOT / 'run-output/crowd-audio-validation.json'
     report_path.parent.mkdir(exist_ok=True)

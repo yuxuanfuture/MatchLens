@@ -1,7 +1,7 @@
 import { playbackView } from './replay-view.js';
 
 async function loadSoundtrack(context) {
-  const response = await fetch(new URL('./audio/stream-04-crowd.mp3', import.meta.url));
+  const response = await fetch(new URL('./audio/stream-04-crowd.mp3?v=var-murmur', import.meta.url));
   if (!response.ok) throw new Error('Crowd soundtrack unavailable');
   return context.decodeAudioData(await response.arrayBuffer());
 }
