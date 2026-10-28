@@ -37,6 +37,34 @@ class Stream04Tests(unittest.TestCase):
         errors = validate_records(self.load_rows())
         self.assertEqual(errors, [], "\n".join(errors))
 
+    def test_opening_433_and_4231_release_into_live_movement(self):
+        frames = {row['event_time_ms']: row for row in self.load_rows() if row['record_type'] == 'tracking'}
+        opening = {p['player_id']: p for p in frames[0]['players']}
+        later = {p['player_id']: p for p in frames[12000]['players']}
+        formations = {
+            'A': ((2, 4, 5, 3), (8, 6, 10), (7, 9, 11)),
+            'U': ((2, 4, 5, 3), (6, 8), (11, 10, 7), (9,)),
+        }
+        for team, lines in formations.items():
+            direction = 1 if team == 'A' else -1
+            previous_depth = opening[f'{team}1']['x'] * direction
+            for line in lines:
+                players = [opening[f'{team}{number}'] for number in line]
+                with self.subTest(team=team, line=line):
+                    self.assertLessEqual(max(p['x'] for p in players) - min(p['x'] for p in players), 2)
+                    depth = sum(p['x'] for p in players) / len(players) * direction
+                    self.assertGreaterEqual(depth - previous_depth, 8, 'successive lines need visible depth')
+                    widths = sorted(p['y'] for p in players)
+                    for left, right in zip(widths, widths[1:]):
+                        self.assertGreaterEqual(right - left, 12, 'players must spread across their line')
+                    previous_depth = depth
+            defenders = [later[f'{team}{number}']['x'] for number in lines[0]]
+            self.assertGreater(max(defenders) - min(defenders), 4, 'the opening lines must not stay fixed')
+            movers = sum(math.hypot(later[f'{team}{number}']['x'] - opening[f'{team}{number}']['x'],
+                                   later[f'{team}{number}']['y'] - opening[f'{team}{number}']['y']) > 2
+                         for line in lines for number in line)
+            self.assertGreaterEqual(movers, 6, 'off-ball players must continue moving with the play')
+
     def test_open_play_uses_backfield_and_both_wings_without_a_central_pile(self):
         frame = next(row for row in self.load_rows()
                      if row["record_type"] == "tracking" and row["event_time_ms"] == 22000)
