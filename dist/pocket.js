@@ -16,7 +16,7 @@ try {
   if(stored && roles.includes(stored.role) && ['fan','analyst'].includes(stored.mode) && stored.layouts && typeof stored.layouts==='object' && !Array.isArray(stored.layouts)) preferences=stored;
 } catch { storageAvailable=false; }
 let payload=null;
-const audience={language:'zh',focus_team:'A',focus_player:null,metric:'overview',...(preferences.audience||{})};
+const audience={language:'en',focus_team:'A',focus_player:null,metric:'overview',...(preferences.audience||{})};
 audience.language=language();
 const streams=REPLAY_STREAMS;
 const requestedScene=new URLSearchParams(location.search).get('scene');
