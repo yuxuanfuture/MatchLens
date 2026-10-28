@@ -1,6 +1,7 @@
 import { playbackView } from './replay-view.js';
+import { goalCelebration } from './goal-celebration.js';
 
-export function toSnapshot(payload,formatName=value=>value) {
+export function toSnapshot(payload,formatName=value=>value,presentationElapsed=0) {
   const time = playbackView(payload).position_ms / 1000;
   const overlays = payload?.overlays || [];
   const goal = overlays.find(o => o.kind === 'goal');
@@ -19,6 +20,7 @@ export function toSnapshot(payload,formatName=value=>value) {
     sessionId:payload?.session_id,epoch:payload?.epoch||0,playing:!!payload?.playing,
     ball:payload?.tracking?.ball ? [payload.tracking.ball.x,payload.tracking.ball.y] : null,
     overlays, goaled:!!goal, goalAt:goal?.at_ms/1000, goalTeam:goal?.team_id==='A'?'blue':'coral',
+    celebration:goalCelebration(payload,formatName,presentationElapsed),
     events:payload?.events || [], phase:{}, passes:0, backwards:0};
 }
 

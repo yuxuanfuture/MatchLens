@@ -49,15 +49,16 @@ function playerModel(team, number) {
   const key = `${team}:${number}`;
   if (models.has(key)) return models.get(key);
   const faces = [];
-  const shirt = team === 'blue' ? [48,150,245] : [250,105,67];
+  const commentator = team === 'commentator';
+  const shirt = commentator ? [42,55,70] : team === 'blue' ? [48,150,245] : [250,105,67];
   const skin = [255,190,119], hair = [100,58,34], white = [255,247,220], boots = [35,48,65];
-  const box = (center, size, color) => {
+  const box = (center, size, color, armSide = 0) => {
     const surfaces = {};
     const vertices = Array.from({length:8}, (_, i) => center.map((v, axis) => v + ((i >> axis) & 1 ? .5 : -.5) * size[axis]));
     for (const {axis, sign, corners} of BOX_FACES) {
       const normal = [0,0,0]; normal[axis] = sign;
       const middle = [...center]; middle[axis] += sign * size[axis] / 2;
-      const face = {vertices:corners.map(i=>vertices[i]), normal, center:middle, color};
+      const face = {vertices:corners.map(i=>vertices[i]), normal, center:middle, color, armSide};
       faces.push(face);
       if (axis === 1) surfaces[sign === 1 ? 'front' : 'back'] = face;
     }
@@ -73,11 +74,11 @@ function playerModel(team, number) {
     box([side*.105,step,.16],[.125,.135,.18],shirt);
     box([side*.105,step,.245],[.13,.14,.035],white);
     box([side*.105,step,.295],[.13,.14,.07],skin);
-    box([side*.105,step,.385],[.185,.21,.14],white);
-    box([side*.235,-step,.60],[.13,.17,.22],shirt);
-    box([side*.245,-step,.50],[.135,.175,.035],white);
-    box([side*.25,-step+.025,.435],[.125,.15,.10],skin);
-    box([side*.25,-step+.045,.385],[.13,.17,.08],skin);
+    box([side*.105,step,.385],[.185,.21,.14],commentator?shirt:white);
+    box([side*.235,-step,.60],[.13,.17,.22],shirt,side);
+    box([side*.245,-step,.50],[.135,.175,.035],white,side);
+    box([side*.25,-step+.025,.435],[.125,.15,.10],skin,side);
+    box([side*.25,-step+.045,.385],[.13,.17,.08],skin,side);
   }
   const jersey = box([0,0,.585],[.36,.245,.30],shirt);
   box([0,0,.755],[.14,.15,.08],skin);
@@ -100,7 +101,11 @@ function playerModel(team, number) {
   patch(head.front,-.055,.805,.11,.025,.164,[100,44,28]);
   patch(head.front,-.022,.805,.052,.010,.165,[229,113,81]);
   patch(jersey.front,-.10,.705,.20,.026,.124,white);
-  for (const sign of [-1,1]) {
+  if (commentator) {
+    patch(jersey.front,-.075,.47,.15,.24,.125,white);
+    patch(jersey.front,-.025,.49,.05,.20,.126,[35,45,53]);
+  }
+  for (const sign of number==null?[]:[-1,1]) {
     const surface = sign === 1 ? jersey.front : jersey.back;
     (surface.decals ??= []).push({center:[0,sign*.124,.59], number:String(number), sign});
   }
@@ -110,7 +115,16 @@ function playerModel(team, number) {
 
 const dot = (a,b) => a[0]*b[0] + a[1]*b[1] + a[2]*b[2];
 
-export function drawPlayerAvatar(ctx, player, {project, angle, size, lift = 0}) {
+function raiseArm(face, amount) {
+  if (!face.armSide || !amount) return face;
+  const angle = face.armSide*2.5*amount, c = Math.cos(angle), s = Math.sin(angle);
+  const pivot = [face.armSide*.19,0,.70];
+  const rotate = ([x,y,z]) => [x*c-z*s,y,x*s+z*c];
+  const transform = point => rotate(point.map((v,i)=>v-pivot[i])).map((v,i)=>v+pivot[i]);
+  return {...face,vertices:face.vertices.map(transform),center:transform(face.center),normal:rotate(face.normal)};
+}
+
+export function drawPlayerAvatar(ctx, player, {project, angle, size, lift = 0, armsRaised = 0}) {
   const origin = project(player.x,player.y);
   const px = project(player.x+1,player.y), py = project(player.x,player.y+1);
   const sx = [px[0]-origin[0],px[1]-origin[1]], sy = [py[0]-origin[0],py[1]-origin[1]];
@@ -123,7 +137,7 @@ export function drawPlayerAvatar(ctx, player, {project, angle, size, lift = 0}) 
   const camera = [-forward[0]*sign,right[0]*sign,Math.abs(determinant)];
   const scale = size * .84;
   const point = ([r,f,h]) => [origin[0]+(r*right[0]+f*forward[0])*scale,origin[1]+lift+(r*right[1]+f*forward[1]-h)*scale];
-  const visible = playerModel(player.team,player.number).filter(face=>dot(face.normal,camera)>.001);
+  const visible = playerModel(player.team,player.number).map(face=>raiseArm(face,armsRaised)).filter(face=>dot(face.normal,camera)>.001);
   visible.sort((a,b)=>dot(a.center,camera)-dot(b.center,camera));
   const paint = face => {
     if (face.number !== undefined) {

@@ -1,6 +1,7 @@
 import { clamp } from './matches.js';
 import { BallRoll, drawFootball } from './football.js';
 import { PlayerFacing, drawPlayerAvatar } from './player-avatar.js';
+import { drawGoalEffects, celebrationPose } from './goal-effects.js';
 
 // Project the 105 × 68 metre data plane onto the four measured grass corners.
 export function makeProjection(corners) {
@@ -24,7 +25,7 @@ export class StadiumRenderer {
     this.resize();new ResizeObserver(()=>this.resize()).observe(canvas);
   }
   async load() {
-    [this.background,this.blue,this.coral]=await Promise.all(['stadium-roomy','player-blue','player-coral'].map(name=>loadImage(`./assets/${name}.png`)));
+    this.background=await loadImage('./assets/stadium-roomy.png');
   }
   resize() {
     this.width=this.canvas.clientWidth;this.height=this.canvas.clientHeight;
@@ -48,8 +49,10 @@ export class StadiumRenderer {
     if(!this.background)return;
     const ctx=this.ctx,w=this.width,h=this.height;
     const target=mode==='analyst'?1:0;this.blend=this.reduced?target:this.blend+(target-this.blend)*Math.min(1,delta*5);
-    const goalAge=snapshot.goaled?snapshot.time-(snapshot.live?snapshot.goalAt:19.2):-1;
-    const goalZoom=!this.reduced&&goalAge>=0?Math.sin(clamp(goalAge/4)*Math.PI)*.024:0;
+    const legacyAge=snapshot.time-19.2;
+    const celebration=snapshot.live?snapshot.celebration:snapshot.goaled&&legacyAge>=0&&legacyAge<5
+      ?{kind:'confirmed',age:legacyAge,team:'blue',goalX:105}:null;
+    const goalZoom=!this.reduced&&celebration?.kind==='confirmed'?Math.sin(clamp(celebration.age/3)*Math.PI)*.035:0;
     const mobile=w<=700;
     this.scale=w/1672*(1.13+this.blend*.045+goalZoom);
     this.offsetX=(w-1672*this.scale)*.92;
@@ -78,22 +81,22 @@ export class StadiumRenderer {
     for(const e of snapshot.scene.events){if((e.type==='pass'||e.type==='shot')&&e.from&&e.to){const progress=clamp((snapshot.time-(e.at-2))/2);if(progress>0)this.route(e.from,e.to,progress);}}
     const ordered=snapshot.players.map(p=>({...p,screen:this.project(p.x,p.y)})).sort((a,b)=>a.screen[1]-b.screen[1]);
     this.playerFacing.update(snapshot,delta,this.reduced);
-    for(const player of ordered)this.player(player,snapshot);
+    for(const player of ordered)this.player(player,snapshot,celebration);
     const ballSize=Math.max(6.5,9*this.scale);
     const roll=this.ballRoll.advance(snapshot,this.project,ballSize,this.reduced);
     if(snapshot.ball){const bp=this.project(...snapshot.ball);drawFootball(ctx,bp[0],bp[1],ballSize,roll);}
-    if(goalAge>=0&&!this.reduced)this.celebrate(goalAge);
+    if(!this.reduced)drawGoalEffects(ctx,celebration,{width:w,height:h,project:this.project,scale:this.scale});
   }
-  player(player,snapshot) {
+  player(player,snapshot,celebration) {
     const ctx=this.ctx,[x,y]=player.screen;
     const size=(55+player.y*.11)*this.scale;
     const moving=snapshot.live||snapshot.time>0&&snapshot.time<19.2;
     const bob=this.reduced?0:(moving?Math.sin(snapshot.time*8+player.number)*1.2*this.scale:0);
-    const bounce=snapshot.goaled&&player.team===(snapshot.live?snapshot.goalTeam:'blue')&&!this.reduced?Math.abs(Math.sin((snapshot.time-(snapshot.live?snapshot.goalAt:19.2))*6+player.number))*8*this.scale:0;
+    const pose=celebrationPose(celebration,player,this.reduced);
     const drop=player.drop*85*this.scale;
     ctx.fillStyle='#203e3533';ctx.beginPath();ctx.ellipse(x,y+1,size*.21,size*.065,0,0,Math.PI*2);ctx.fill();
     if(this.blend>.1){ctx.globalAlpha=this.blend*.85;ctx.strokeStyle=player.team==='blue'?'#9aeeff':'#ffc5a2';ctx.lineWidth=1.4;ctx.beginPath();ctx.ellipse(x,y,size*.25,size*.1,0,0,Math.PI*2);ctx.stroke();ctx.globalAlpha=1;}
-    drawPlayerAvatar(ctx,player,{project:this.project,angle:this.playerFacing.get(player),size,lift:bob-bounce-drop});
+    drawPlayerAvatar(ctx,player,{project:this.project,angle:this.playerFacing.get(player),size,lift:bob+pose.lift*this.scale-drop,armsRaised:pose.armsRaised});
     ctx.textAlign='center';ctx.textBaseline='middle';
     if(snapshot.live&&(player.focused||this.blend>.5)){
       if(player.focused){ctx.strokeStyle='#fff294';ctx.lineWidth=3;ctx.beginPath();ctx.ellipse(x,y,size*.34,size*.13,0,0,Math.PI*2);ctx.stroke();}
@@ -101,10 +104,5 @@ export class StadiumRenderer {
       ctx.strokeText(player.name,x,y-size-8);ctx.fillText(player.name,x,y-size-8);
     }
     if(player.number===17&&snapshot.sceneId==='shape'&&snapshot.time>=3&&snapshot.time<7){ctx.fillStyle='#fff5bb';ctx.font=`900 ${11*this.scale}px Nunito`;ctx.fillText('17 ON',x,y-size-14*this.scale);}
-  }
-  celebrate(age) {
-    const ctx=this.ctx,origin=this.project(100,33);
-    for(let i=0;i<46;i++){const angle=i*2.3999,speed=45+(i%7)*11,t=age%(2.8);const x=origin[0]+Math.cos(angle)*speed*t*this.scale,y=origin[1]-90*this.scale+Math.sin(angle)*speed*t*this.scale+22*t*t*this.scale;ctx.globalAlpha=clamp(1-t/3);ctx.fillStyle=['#ff7954','#ffe478','#9ae6f5','#fff8e9'][i%4];ctx.fillRect(x,y,Math.max(3,6*this.scale),Math.max(3,6*this.scale));}ctx.globalAlpha=1;
-    for(let i=0;i<16;i++){const p=this.project(10+i*5.5,-4);const size=25*this.scale;const jump=Math.abs(Math.sin(age*7+i))*6*this.scale;ctx.drawImage(i%3?this.blue:this.coral,p[0]-size/2,p[1]-size-jump,size,size);}
   }
 }

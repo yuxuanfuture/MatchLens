@@ -1,9 +1,10 @@
 import { clamp } from './matches.js';
 import {t, language, applyTranslations, errorText, displayName} from './i18n.js';
 import { LiveClient, toSnapshot } from './live-client.js';
-import { StadiumRenderer } from './pocket-renderer.js?v=ball-facing';
+import { StadiumRenderer } from './pocket-renderer.js?v=goal-celebration';
 import { REPLAY_STREAMS, playbackView, receiveTime, evidenceVisible } from './replay-view.js';
 import { ReplayCrowdAudio } from './crowd-audio.js';
+import { GoalCelebrationUI } from './goal-celebration-ui.js';
 
 const $ = id => document.getElementById(id);
 const moduleNames = ['slogan','commentary','notebook'];
@@ -23,6 +24,7 @@ const streams=REPLAY_STREAMS;
 const requestedScene=new URLSearchParams(location.search).get('scene');
 const state = {scene:streams.includes(requestedScene)?requestedScene:streams[0],time:0,playing:false,mode:preferences.mode,role:preferences.role,arranging:false};
 const renderer = new StadiumRenderer($('stadium'));
+const celebrationUI = new GoalCelebrationUI();
 const crowdAudio=new ReplayCrowdAudio({enabled:preferences.crowdAudio!==false,onStatus:refreshCrowdAudio});
 const client=new LiveClient(value=>{payload=value;state.time=playbackView(value).position_ms/1000;state.playing=value.playing;crowdAudio.update(value);updateUI();},message=>{crowdAudio.disconnect();toast(message);},{translate:t});
 function refreshCrowdAudio(){
@@ -117,6 +119,7 @@ function updateHeadings() {
 }
 function updateUI() {
   if(!payload)return toSnapshot(null);
+  const snapshot=toSnapshot(payload,displayName);
   const scope=`${payload.session_id}:${payload.epoch}`;
   if(scope!==evidenceScope){evidenceScope=scope;clearEvidence();}
   const {story,state:match,facts,focus,pass_quality:quality}=payload;
@@ -135,6 +138,7 @@ function updateUI() {
   const windowLabel=document.createElement('bdi');windowLabel.dir='ltr';windowLabel.textContent=story.window_label;$('commentary-kicker').replaceChildren(document.createTextNode(mode+' · '),windowLabel);
   const storyReady=payload.preferences.language===language();
   $('commentary-title').textContent=storyReady?story.title:t('status.updating');$('commentary-body').textContent=storyReady?story[state.mode==='fan'?'fan_text':'analyst_text']:'';
+  celebrationUI.updateContent(snapshot.celebration,language());
   const own=facts.teams[audience.focus_team];
   $('play-state-note').hidden=match.in_play!==false;
   $('play-state-note').textContent=view.ended?t('review.ended'):t(phase==='awarded'?'review.stopped':'review.paused');
@@ -147,7 +151,7 @@ function updateUI() {
   const playerKey=payload.stream+':'+language();
   if($('player-select').dataset.stream!==playerKey){$('player-select').replaceChildren(new Option(t('ui.all_players'),''),...match.roster.map(p=>new Option(`${displayName(p.name)} #${p.shirt_number}`,p.id)));$('player-select').dataset.stream=playerKey;$('player-select').value=audience.focus_player||'';}
   if(!$('evidence-panel').hidden&&lastContent!==story.id)updateEvidence();lastContent=story.id;
-  return toSnapshot(payload,displayName);
+  return snapshot;
 }
 
 function moveModule(name,left,top) {
@@ -188,7 +192,16 @@ window.addEventListener('resize',()=>{if(innerWidth<=700)setArranging(false);app
 const observer=new ResizeObserver(()=>{if(!drag)applyLayout();});moduleNames.forEach(name=>observer.observe(modules[name]));
 setMode(state.mode,false);applyLayout();
 renderer.load().then(()=>{$('load-status').hidden=true;requestAnimationFrame(frame);}).catch(error=>{console.error(error);$('load-status').textContent=t('status.load_failed');});
-function frame(now){const delta=Math.min((now-previousFrame)/1000,.06);previousFrame=now;renderer.render(toSnapshot(payload,displayName),state.mode,delta);requestAnimationFrame(frame);}
+let animationPayload=null,presentationElapsed=0;
+function frame(now){
+  const delta=Math.min((now-previousFrame)/1000,.06);previousFrame=now;
+  presentationElapsed=payload===animationPayload?Math.min(.5,presentationElapsed+delta):0;animationPayload=payload;
+  const snapshot=toSnapshot(payload,displayName,presentationElapsed);
+  renderer.render(snapshot,state.mode,delta);
+  celebrationUI.render(snapshot.celebration,{reduced:renderer.reduced,
+    time:snapshot.time+(payload?.playing?presentationElapsed*(payload.speed||1):0),reviewPhase:payload?.review?.phase});
+  requestAnimationFrame(frame);
+}
 for(const [id,key] of [['team-select','focus_team'],['player-select','focus_player'],['metric-select','metric']])$(id).addEventListener('change',event=>{audience[key]=event.target.value||null;save();client.control({preferences:audiencePrefs()});});
 $('speed-select').addEventListener('change',event=>controlPlayback({speed:Number(event.target.value)}));
 $('recap-button').addEventListener('click',async()=>{try{await setPlaying(false);const recap=await client.recap();$('recap-text').textContent=recap.text+(recap.agent_status==='running'?' · '+t('status.reviewing'):'');if(recap.agent_status==='running')setTimeout(()=>{if($('recap-panel').open)$('recap-button').click();},1500);$('recap-list').replaceChildren(...[...recap.milestones,...recap.turning_points.map(p=>({...p,match_clock:clock(p.time_ms+(payload?.state.match_clock_start_ms||0))}))].sort((a,b)=>a.time_ms-b.time_ms).map(m=>{const li=document.createElement('li');li.textContent=`${m.match_clock} · ${m.text} · ${m.evidence_ids.join(', ')}`;return li;}));if(!$('recap-panel').open)$('recap-panel').showModal();}catch(error){toast(errorText(error));}});
