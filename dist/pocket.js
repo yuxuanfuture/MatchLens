@@ -128,7 +128,9 @@ function updateUI() {
   $('seek').max=String(view.duration_ms/1000);if(!releaseScrub)$('seek').value=String(view.position_ms/1000);$('seek').style.setProperty('--progress',`${view.position_ms/Math.max(1,view.duration_ms)*100}%`);
   $('seek').setAttribute('aria-valuetext',t('ui.seconds_observed',{clock:clock(view.match_clock_ms),seconds:Math.round(view.position_ms/1000)}));
   $('match-time').textContent=clock(view.match_clock_ms);$('score').textContent=match.score_known===false?'— : —':`${match.score.A} – ${match.score.U}`;
-  const status=$('review-status');status.hidden=!payload.playback&&phase==='none';status.dataset.phase=view.ended?'ended':phase;
+  const status=$('review-status');
+  status.hidden=(!payload.playback&&phase==='none')||(phase==='awarded'&&!view.ended);
+  status.dataset.phase=view.ended?'ended':phase;
   status.textContent=view.ended?t('review.ended'):phase!=='none'?t(`review.${phase}.title`):payload.playback?t('review.added_time',{minutes:Math.floor(view.announced_added_time_ms/60000)}):'';
   const playKey=payload.playing?'ui.pause':'ui.play';$('play-button').setAttribute('data-i18n-aria-label',playKey);$('play-button').setAttribute('aria-label',t(playKey));$('play-button').innerHTML=`<i class="ph-bold ph-${payload.playing?'pause':'play'}" aria-hidden="true"></i>`;
   $('scene-label').textContent=t('status.received',{stream:payload.stream,count:payload.received_records});

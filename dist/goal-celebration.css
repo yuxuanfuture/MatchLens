@@ -1,5 +1,5 @@
 /* All motion values are driven by replay time; decorations never capture input. */
-#goal-celebration{position:absolute;z-index:4;top:16%;left:50%;width:max-content;max-width:85%;transform:translateX(-50%);pointer-events:none;text-align:center;opacity:var(--goal-opacity,1)}
+#goal-celebration{position:absolute;z-index:4;top:132px;left:50%;width:max-content;max-width:85%;transform:translateX(-50%);pointer-events:none;text-align:center;opacity:var(--goal-opacity,1)}
 .goal-announcement{padding:15px 35px 18px;border-radius:25px;background:linear-gradient(125deg,#fffbe7,#fff0bc);border:3px solid #ffd16a;box-shadow:0 8px 0 #d36a3b25,0 15px 55px #9b51222b;transform:scale(var(--goal-scale,1));color:#a93625}
 .goal-announcement::before,.goal-announcement::after{content:'✦';position:absolute;top:32%;font-size:46px;color:#eaaa32;text-shadow:0 3px 0 #fff4d8}
 .goal-announcement::before{left:-31px;transform:rotate(-15deg)}.goal-announcement::after{right:-31px;transform:rotate(15deg)}
@@ -17,6 +17,6 @@
 .commentary-module[data-celebrating] #commentary-body{color:#684f2d;font-weight:900}
 #score{transform-origin:center;display:inline-block}
 #review-status:is([data-phase=checking],[data-phase=review_requested],[data-phase=reviewing],[data-phase=awaiting_decision]){box-shadow:0 0 0 calc(var(--review-glow,0)*5px) #f3c86430}
-@media(max-width:1150px) and (min-width:701px){#goal-celebration{top:200px}.goal-announcement{padding:12px 25px}#goal-headline{font-size:42px}}
+@media(max-width:1150px) and (min-width:701px){#goal-celebration{top:180px}.goal-announcement{padding:12px 25px}#goal-headline{font-size:42px}}
 @media(max-width:700px){#goal-celebration{top:105px;max-width:calc(100% - 46px)}.goal-announcement{padding:11px 19px 13px;border-radius:20px}#goal-headline{font-size:34px}#goal-kicker{font-size:9px}.goal-detail{font-size:13px;gap:8px}.goal-announcement::before,.goal-announcement::after{font-size:28px}.goal-announcement::before{left:-20px}.goal-announcement::after{right:-20px}}
 @media(prefers-reduced-motion:reduce){.commentary-module[data-celebrating],.goal-announcement,#score{transform:none!important}#goal-celebration{opacity:1}.commentary-module[data-celebrating]{box-shadow:0 0 0 2px #edbc5280}}
