@@ -122,7 +122,6 @@ function updateUI() {
   const windowLabel=document.createElement('bdi');windowLabel.dir='ltr';windowLabel.textContent=story.window_label;$('commentary-kicker').replaceChildren(document.createTextNode(mode+' · '),windowLabel);
   const storyReady=payload.preferences.language===language();
   $('commentary-title').textContent=storyReady?story.title:t('status.updating');$('commentary-body').textContent=storyReady?story[state.mode==='fan'?'fan_text':'analyst_text']:'';
-  $('commentary-evidence').replaceChildren(...(state.mode==='analyst'?story.evidence_ids.slice(0,3):[]).map(id=>{const span=document.createElement('span');span.textContent=id;return span;}));
   const own=facts.teams[audience.focus_team];
   $('play-state-note').hidden=match.in_play!==false;
   $('play-state-note').textContent=view.ended?t('review.ended'):t(phase==='awarded'?'review.stopped':'review.paused');
