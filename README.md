@@ -2,37 +2,42 @@
 
 [![CI](https://github.com/yuxuanfuture/MatchLens/actions/workflows/ci.yml/badge.svg)](https://github.com/yuxuanfuture/MatchLens/actions/workflows/ci.yml)
 
+MatchLens turns observed football events into evidence-linked explanations and a
+personalized miniature stadium. The same facts become concise storytelling for fans,
+quantified context for analysts, and synchronized cues for broadcast overlays.
+
 https://github.com/user-attachments/assets/7c19dc86-b2b1-4d1c-8126-0246e06f65e4
 
-MatchLens turns synthetic football events into evidence-linked match intelligence
-and a personalized miniature stadium. It ingests events as they arrive, derives
-deterministic football metrics, explains why a moment matters, renders synchronized
-overlays, and adapts the same evidence for fans and analysts in five languages.
+The default demo is fully offline: no API key, model download, npm install, or
+frontend build is required.
 
-The default demo is fully offline. It does not require an API key, a model download,
-an npm install, or a frontend build step.
+## Why MatchLens
 
-## Demo scenario
+Football data is easy to count but hard to explain. MatchLens keeps each claim tied
+to the event or tracking records that support it, respects what was observable at
+that moment, and exposes uncertainty instead of filling gaps with invented facts.
 
-The home page plays a 120-second added-time sequence at match time 90:00–92:00:
+The interface adapts one evidence stream for Fan and Analyst modes, five languages,
+followed teams or players, a replayable Pocket Stadium, and a transparent broadcast
+overlay.
 
-- Atlas builds an attack before a clean Union tackle.
-- Union counters into a one-on-one and puts the ball in the net.
-- An assistant raises the offside flag.
-- VAR review progresses from the initial check to an on-field review.
-- The goal is awarded only after the final decision arrives.
+## Highlights
 
-Useful replay positions are 72 seconds for the tackle, 86–90 seconds for the
-counterattack and finish, 104 seconds for the on-field review, and 115 seconds for
-the confirmed goal.
+- **Evidence first:** explanations link back to received records and deterministic
+  metrics; missing data remains missing rather than becoming zero.
+- **Replay aware:** event time and arrival time are kept separate, so a replay cannot
+  reveal a future goal or VAR decision.
+- **Audience aware:** Fan and Analyst modes share facts but differ in language,
+  density, focus, and presentation.
+- **Multi-agent ready:** an optional bounded system can delegate investigation,
+  verify claims independently, and discard stale results.
+- **Portable demo:** the main experience runs locally with Python and a modern
+  browser, without a frontend build step.
 
 ## Quick start
 
-Requirements:
-
-- Python 3.13 for the local service.
-- A modern browser.
-- Node.js 22 only if you want to run the JavaScript tests.
+Requirements: Python 3.13 and a modern browser. Node.js 22 is needed only for the
+browser-side test suite.
 
 ### macOS or Linux
 
@@ -46,195 +51,115 @@ python3 -m backend.server --port 43128
 powershell -ExecutionPolicy Bypass -File .\start-matchlens-windows.ps1
 ```
 
-Open <http://127.0.0.1:43128/?lang=en>. Keep the terminal or background process
-running. Opening `dist/index.html` directly cannot provide the event stream and
-local APIs.
+Open <http://127.0.0.1:43128/?lang=en>. The local service must remain running because
+it provides the event stream, evidence APIs, and replay controls.
 
-| Page | Local URL |
-| --- | --- |
-| Pocket Stadium | `http://127.0.0.1:43128/?lang=en` |
-| Data and video tools | `http://127.0.0.1:43128/sources.html` |
-| Broadcast overlay | `http://127.0.0.1:43128/overlay.html` |
-| Service configuration | `http://127.0.0.1:43128/api/config` |
+## Demo
 
-## What to try
+The primary scenario is a 120-second added-time sequence: a clean tackle launches a
+counterattack, a one-on-one finish is flagged offside, VAR progresses to an on-field
+review, and the goal is awarded only after the final decision becomes observable.
 
-1. Press **Replay** and seek through the tackle, counterattack, offside flag, VAR
-   review, and confirmed goal.
-2. Switch between Fan and Analyst modes. The fan receives a concise explanation;
-   the analyst receives quantities, qualifications, and evidence identifiers.
-3. Change language between English, Chinese, French, Spanish, and Arabic. Arabic
-   uses right-to-left presentation without changing the underlying match facts.
-4. Follow a club, player, role, or metric. The story, statistics, pitch highlight,
-   and draggable module layout adapt to the selected audience.
-5. Open **See the evidence** to inspect the observed records behind each claim.
-6. Export the timed overlay JSON or open the transparent broadcast overlay.
-7. Generate a recap of the observed interval. Seeking backward removes future
-   goals, decisions, and evidence.
+Try switching between Fan and Analyst modes, changing language, following a player,
+opening **See the evidence**, generating a recap, and seeking backward to confirm that
+future outcomes disappear.
 
-The crowd-audio controller is fault tolerant: a source clone runs silently when the
-optional local soundtrack is absent. See [Optional soundtrack](#optional-soundtrack).
+## Multi-agent system
 
-## Architecture
+The product does not require a model to run. When the fail-closed model policy is
+explicitly enabled, the same frozen evidence tools can be used by a bounded
+multi-agent investigation system:
 
-```text
-synthetic JSONL arrival stream
-            |
-            v
-EventStore -> frozen evidence + deterministic metrics
-            |
-            +-> offline fact publisher
-            |
-            +-> permission-gated multi-agent harness
-                    coordinator / scout / tactics
-                    verifier / audience / recap
-            |
-            v
-timed story + evidence + coordinates + overlays
-            |
-            v
-SSE -> Fan / Analyst UI + recap + broadcast output
+```mermaid
+flowchart TB
+    E[Received events and tracking] --> G[Time and coverage gate]
+    G --> S[Frozen evidence snapshot]
+    S --> T[Deterministic football tools]
+
+    P[Fail-closed model policy] --> C
+    B[Model, tool, turn, and wall-clock budgets] --> C
+    T --> C
+
+    subgraph MAS[Optional bounded multi-agent system]
+        C[Coordinator]
+        SC[Scout]
+        TA[Tactics]
+        AU[Audience]
+        RC[Recap]
+        M[Shared working memory]
+        D[Candidate explanation]
+        V[Independent verifier]
+        R[Reviewed result]
+
+        C -. may delegate .-> SC
+        C -. may delegate .-> TA
+        C -. may delegate .-> AU
+        C -. may delegate .-> RC
+        SC --> M
+        TA --> M
+        AU --> M
+        RC --> M
+        M --> C
+        C --> D
+        D --> V
+        V -- reject: one revision --> C
+        V -- approve --> R
+    end
+
+    R --> O[Fan and Analyst output]
+    O --> UI[Pocket Stadium, evidence, overlay, and recap]
 ```
 
-The local server binds to `127.0.0.1` and requires a matching local origin for API
-requests. Uploaded video and generated outputs stay under the ignored `run-output/`
-directory.
-
-## Microsoft and GitHub technology
-
-This public source release uses the Microsoft-owned GitHub platform for repository
-hosting, reviewable history, GitHub Actions continuous integration, and a GitHub CLI
-release workflow. CI runs the reproducible offline acceptance suite on every push
-and pull request.
-
-The runtime agent harness is a custom, bounded orchestration implementation with
-specialized roles, shared facts, explicit handoffs, independent verification,
-failure recovery, request budgets, and stale-result cancellation.
-
-Microsoft Foundry, Microsoft Agent Framework, and Azure are not integrated in this
-version. The repository does not claim that they are. `docs/FOUNDRY_INTEGRATION.md`
-is an integration contract for future work, not an implemented adapter.
-
-## Model API policy
-
-The checked-in policy is fail-closed: `config/model-policy.json` has model calls
-disabled and a zero request budget. The offline demo remains functional in that
-state.
-
-Optional DeepSeek and local Ollama adapters exist for controlled evaluation. To use
-one, the project owner must provide explicit authorization, configure a positive
-request budget, and supply credentials locally. Credentials must never be committed.
-
-Copy the template only when an authorized evaluation is required:
-
-```bash
-cp -n .env.example .env.local
-```
-
-Only `.env.local` or process environment variables may contain secrets. The browser
-bundle does not receive provider credentials. See `backend/api_policy.py`,
-`backend/model_providers.py`, and `docs/DEEPSEEK_SMOKE_TEST.zh-CN.md` for the exact
-controls and test procedure.
-
-## Optional local video inference
-
-The basic stadium does not require computer-vision dependencies. The optional video
-pipeline uses local Ultralytics, PyTorch, OpenCV, BoT-SORT, pitch calibration, and
-checksum-verified detector weights.
-
-Do not copy virtual environments between machines. Rebuild from the pinned files:
-
-### macOS
-
-Install `uv`, then run:
-
-```bash
-python3 scripts/setup_vision.py
-./.venv-vision/bin/python -m backend.server --port 43128
-```
-
-### Windows
-
-```powershell
-py -3.13 scripts\setup_vision_windows.py
-powershell -ExecutionPolicy Bypass -File .\start-video-windows.ps1
-```
-
-The setup scripts download dependencies and three detector weights, verify their
-checksums, and store them in ignored local directories. Review the upstream license
-terms before installation; see `THIRD_PARTY_NOTICES.md` and
-`config/vision-model.json`.
-
-This is an offline preprocessing path, not a claim of real-time broadcast-video
-inference. Anonymous tracks require explicit roster binding before real names can be
-shown. Projection speeds are estimates, and broad event-recall accuracy has not
-been established.
-
-## Optional soundtrack
-
-The public source repository intentionally excludes the finished crowd soundtrack
-and all source recordings. The local mix includes material whose license does not
-permit redistribution as source assets.
-
-The application degrades to silent replay when `dist/audio/stream-04-crowd.mp3` is
-missing. If you have lawfully obtained the recordings and accepted their licenses,
-you can rebuild the local soundtrack with:
-
-```bash
-python3 -m pip install -r requirements-audio.txt
-python3 scripts/build_crowd_audio.py --source-dir /path/to/audio-sources
-```
-
-The cue plan and attribution links are in `data/stream-04-audio.json` and
-`dist/audio/credits.html`. Do not commit the generated audio file.
+Only the coordinator may delegate. Every non-empty candidate receives an independent
+review, all numerical claims must come from deterministic tools, and results from an
+old seek, preference state, or evidence window are discarded. DeepSeek and local
+Ollama adapters are optional; the checked-in policy disables model calls by default.
 
 ## Verification
 
-Run the complete source-repository acceptance suite without model calls:
+Run the complete offline acceptance suite:
 
 ```bash
 python3 scripts/offline_acceptance.py
-python3 scripts/api_acceptance.py
 ```
 
-`offline_acceptance.py` validates all synthetic fixtures, runs the core Python
-tests, and runs every browser-side Node test. Vision tests run automatically only
-when a working optional vision environment is available; otherwise the report marks
-them as skipped. Results are written to ignored files under `run-output/acceptance/`.
+It validates the synthetic fixtures, runs the Python tests, and runs the browser-side
+Node tests without making a model API request. GitHub Actions runs the same acceptance
+path on every push and pull request.
 
-The API acceptance command is plan-only unless `--execute` is explicitly supplied.
-Execution remains blocked while the checked-in policy is disabled.
-
-## Evidence and limitations
-
-- All clubs, players, positions, events, and scores are fictional synthetic data.
-- No Premier League match footage, official data feed, club crest, or trademarked
-  broadcast package is included.
-- Names and shirt numbers come from the synthetic roster, not face recognition.
-- Pass difficulty is a transparent heuristic, not a learned probability.
-- Distance, speed, and possession use observed samples; missing frames remain
-  missing rather than being silently interpolated.
-- Sequence does not establish causation. Explanations preserve evidence windows and
-  state explicit limitations.
-- The current public demo uses deterministic offline explanations. Optional model
-  quality and live latency are not claimed without a separately authorized run.
-
-## Repository map
+## Project structure
 
 | Path | Purpose |
 | --- | --- |
-| `backend/` | Event ingestion, metrics, explanations, API policy, agent harness, local service, and optional vision worker |
-| `dist/` | Browser application, renderer, overlay, localizations, fonts, icons, and generated visual assets |
-| `data/` | Synthetic arrival streams, manifests, and audio cue plan |
-| `evals/` | Fixture expectations and historical, clearly labelled evaluation artifacts |
-| `scripts/` | Deterministic generators, validators, setup utilities, and acceptance commands |
+| `backend/` | Event service, deterministic analytics, evidence tools, optional agent harness, and local video workers |
+| `dist/` | Pocket Stadium, renderer, localization, data tools, and broadcast overlay |
+| `data/` | Reproducible synthetic streams, manifests, and audio cue plans |
+| `evals/` | Fixture expectations and clearly labelled historical evaluation runs |
+| `scripts/` | Dataset generation, validation, environment setup, and acceptance commands |
 | `tests/` | Python and browser-side regression tests |
-| `docs/` | Engineering limits, contracts, setup notes, and design evidence |
-| `case-design/` | Design rationale for the current 120-second scenario |
+| `docs/` and `case-design/` | Engineering contracts, setup guides, limitations, and scenario rationale |
 
-## License and third-party material
+## Documentation
 
-The original MatchLens code is publicly available for hackathon inspection,
-evaluation, and testing under the repository's source-available `LICENSE`. Third-
-party components remain under their own licenses. Review `THIRD_PARTY_NOTICES.md`
-before redistributing or extending the project.
+- [Multi-agent design](docs/HARNESS_PLAN.zh-CN.md)
+- [Event stream and broadcast overlay](docs/STREAM_AND_OVERLAY.md)
+- [Synthetic data contract](data/README.md)
+- [Offline acceptance guide](docs/OFFLINE_ACCEPTANCE.zh-CN.md)
+- [Optional local video inference](docs/WINDOWS_VIDEO.zh-CN.md)
+- [Engineering boundaries](docs/ENGINEERING_ACCEPTANCE.zh-CN.md)
+- [Submission overview](SUBMISSION.md)
+- [Third-party notices](THIRD_PARTY_NOTICES.md)
+
+## Boundaries and license
+
+- All clubs, players, events, positions, and scores are fictional synthetic data.
+- No Premier League footage, official data feed, club crest, or production partnership
+  is included or claimed.
+- The optional video path is offline preprocessing, not demonstrated real-time
+  broadcast inference; anonymous tracks require explicit roster binding.
+- The public repository excludes model weights, third-party source recordings, the
+  generated crowd soundtrack, and machine-specific virtual environments.
+
+The original MatchLens code is available for hackathon inspection, evaluation, and
+testing under the repository's source-available [LICENSE](LICENSE). Third-party
+components remain under their own licenses.
