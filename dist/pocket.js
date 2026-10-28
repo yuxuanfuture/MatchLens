@@ -78,7 +78,7 @@ function closePanel(name,restore=false) {$(name+'-panel').hidden=true;$(name==='
 function openPanel(name) {closePanel(name==='layout'?'evidence':'layout');$(name+'-panel').hidden=false;$(name==='layout'?'arrange-button':'evidence-button').setAttribute('aria-expanded','true');$('close-'+name).focus();if(name==='evidence')updateEvidence();}
 function setPlaying(value){client.control({playing:value});}
 function seek(time){clearEvidence();client.control({seek_ms:receiveTime(payload,time)});}
-async function setScene(id){if(audience.focus_player&&!/^[AU]\d+$/.test(audience.focus_player))audience.focus_player=null;clearEvidence();state.scene=id;payload=null;lastContent='';try{await client.open(id,audiencePrefs());for(const button of document.querySelectorAll('[data-scene]'))button.setAttribute('aria-pressed',String(button.dataset.scene===id));announce(t('toast.scene',{stream:id}));}catch(error){toast(errorText(error));$('runtime-status').textContent=t('error.connection');}}
+async function setScene(id){if(audience.focus_player&&!/^[AU]\d+$/.test(audience.focus_player))audience.focus_player=null;clearEvidence();state.scene=id;payload=null;lastContent='';try{await client.open(id,audiencePrefs());announce(t('toast.scene',{stream:id}));}catch(error){toast(errorText(error));$('runtime-status').textContent=t('error.connection');}}
 function updateEvidence() {
   if(!payload)return;
   const records=[...new Map([...payload.events,...payload.evidence_records].map(e=>[e.id,e])).values()].sort((a,b)=>b.observed_at_ms-a.observed_at_ms||b.event_time_ms-a.event_time_ms);
@@ -108,7 +108,6 @@ function updateUI() {
   const {story,state:match,facts,focus,pass_quality:quality}=payload;
   const view=playbackView(payload),phase=payload.review?.phase||'none';
   for(const team of match.teams){$(team.id==='A'?'team-a':'team-u').textContent=displayName(team.name);const option=$('team-select').querySelector(`option[value="${team.id}"]`);if(option)option.textContent=displayName(team.name);}
-  for(const button of document.querySelectorAll('[data-scene]'))button.setAttribute('aria-pressed',String(button.dataset.scene===payload.stream));
   $('seek').max=String(view.duration_ms/1000);$('seek').value=String(view.position_ms/1000);$('seek').style.setProperty('--progress',`${view.position_ms/Math.max(1,view.duration_ms)*100}%`);
   $('seek').setAttribute('aria-valuetext',t('ui.seconds_observed',{clock:clock(view.match_clock_ms),seconds:Math.round(view.position_ms/1000)}));
   $('match-time').textContent=clock(view.match_clock_ms);$('score').textContent=match.score_known===false?'— : —':`${match.score.A} – ${match.score.U}`;
@@ -160,7 +159,6 @@ $('reset-layout').addEventListener('click',()=>{preferences.layouts[`${state.rol
 $('replay-button').addEventListener('click',()=>{seek(0);setPlaying(true);});$('restart-button').addEventListener('click',()=>seek(0));
 $('play-button').addEventListener('click',()=>{if(state.time>=playbackView(payload).duration_ms/1000)seek(0);setPlaying(!state.playing);});
 $('seek').addEventListener('change',event=>{setPlaying(false);seek(event.target.value);});
-for(const button of document.querySelectorAll('[data-scene]'))button.addEventListener('click',()=>setScene(button.dataset.scene));
 document.addEventListener('keydown',event=>{if(event.key==='Escape'){if(!$('layout-panel').hidden)closePanel('layout',true);else if(!$('evidence-panel').hidden)closePanel('evidence',true);if(state.arranging){setArranging(false);$('arrange-button').focus();}}});
 document.addEventListener('visibilitychange',()=>{if(document.hidden)setPlaying(false);});
 window.addEventListener('resize',()=>{if(innerWidth<=700)setArranging(false);applyLayout();});
