@@ -26,6 +26,12 @@ export class StadiumRenderer {
   }
   async load() {
     this.background=await loadImage('./assets/stadium-roomy.png');
+    this.backgroundLayer=document.createElement('canvas');
+    this.backgroundLayer.width=this.background.width;this.backgroundLayer.height=this.background.height;
+    const ctx=this.backgroundLayer.getContext('2d'),edge=ctx.createLinearGradient(0,0,this.background.width,0);
+    edge.addColorStop(0,'#000');edge.addColorStop(1-16/this.background.width,'#000');edge.addColorStop(1,'#0000');
+    ctx.drawImage(this.background,0,0);ctx.globalCompositeOperation='destination-in';
+    ctx.fillStyle=edge;ctx.fillRect(0,0,this.background.width,this.background.height);
   }
   resize() {
     this.width=this.canvas.clientWidth;this.height=this.canvas.clientHeight;
@@ -55,12 +61,21 @@ export class StadiumRenderer {
     const goalZoom=!this.reduced&&celebration?.kind==='confirmed'?Math.sin(clamp(celebration.age/3)*Math.PI)*.035:0;
     const mobile=w<=700;
     this.scale=w/1672*(1.13+this.blend*.045+goalZoom);
-    this.offsetX=(w-1672*this.scale)*.92;
+    // Move the pitch and all projected objects together; scale the nudge on narrow screens.
+    this.offsetX=(w-1672*this.scale)*.92-Math.min(78,w*.057);
     this.offsetY=mobile?160:(h-941*this.scale)*.45-10-this.blend*12;
     this.project=(x,y)=>{const p=pitchProject(x,y);return [this.offsetX+p[0]*this.scale,this.offsetY+p[1]*this.scale];};
     ctx.setTransform(this.dpr,0,0,this.dpr,0,0);ctx.clearRect(0,0,w,h);
     ctx.fillStyle='#9edcf9';ctx.fillRect(0,0,w,h);
-    ctx.drawImage(this.background,this.offsetX,this.offsetY,1672*this.scale,941*this.scale);
+    // Continue the image's sky into the space exposed by the leftward shift.
+    const backgroundRight=this.offsetX+1672*this.scale;
+    if(backgroundRight<w){
+      ctx.save();ctx.filter='blur(12px)';
+      ctx.drawImage(this.background,this.background.width-12,0,12,this.background.height,
+        backgroundRight-24,this.offsetY,w-backgroundRight+48,941*this.scale);
+      ctx.restore();
+    }
+    ctx.drawImage(this.backgroundLayer,this.offsetX,this.offsetY,1672*this.scale,941*this.scale);
     const sky=ctx.createLinearGradient(0,this.offsetY,0,this.offsetY+110*this.scale);sky.addColorStop(0,'#9edcf9');sky.addColorStop(1,'#9edcf900');ctx.fillStyle=sky;ctx.fillRect(0,0,w,this.offsetY+110*this.scale);
     const bottom=this.offsetY+941*this.scale;
     if(bottom<h){const fade=ctx.createLinearGradient(0,bottom-20,0,bottom);fade.addColorStop(0,'#fff7e600');fade.addColorStop(1,'#fff7e6');ctx.fillStyle=fade;ctx.fillRect(0,bottom-20,w,21);ctx.fillStyle='#fff7e6';ctx.fillRect(0,bottom,w,h-bottom);}
