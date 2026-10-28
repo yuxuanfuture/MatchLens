@@ -8,6 +8,9 @@
     <marker id="arrow-warn" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth">
       <path d="M0,0 L10,5 L0,10 Z" fill="#d67a2c"/>
     </marker>
+    <marker id="arrow-agent" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#79a714"/>
+    </marker>
     <style>
       .canvas { fill: #f7fbf9; }
       .frame { fill: #eef6f2; stroke: #b6c8c1; }
@@ -22,7 +25,10 @@
       .small { fill: #49635c; font: 500 13px Inter, ui-sans-serif, system-ui, sans-serif; }
       .edge-label { fill: #5a706a; font: 600 12px Inter, ui-sans-serif, system-ui, sans-serif; }
       .line { fill: none; stroke: #60766f; stroke-width: 2; marker-end: url(#arrow); }
-      .delegate { fill: none; stroke: #79a714; stroke-width: 2; stroke-dasharray: 7 6; marker-end: url(#arrow); }
+      .branch { fill: none; stroke: #60766f; stroke-width: 2; }
+      .junction { fill: #60766f; }
+      .delegate-bus { fill: none; stroke: #79a714; stroke-width: 2; }
+      .delegate { fill: none; stroke: #79a714; stroke-width: 2; stroke-dasharray: 7 6; marker-end: url(#arrow-agent); }
       .reject { fill: none; stroke: #d67a2c; stroke-width: 2; stroke-dasharray: 7 6; marker-end: url(#arrow-warn); }
       @media (prefers-color-scheme: dark) {
         .canvas { fill: #0b1512; }
@@ -34,7 +40,8 @@
         .output { fill: #123126; stroke: #46a17f; }
         .title, .label { fill: #eef8f4; }
         .section, .small, .edge-label { fill: #abc0b9; }
-        .line { stroke: #809b92; }
+        .line, .branch { stroke: #809b92; }
+        .junction { fill: #809b92; }
       }
     </style>
   </defs>
@@ -63,25 +70,29 @@
   <path class="line" d="M570 149 H630"/>
   <path class="line" d="M860 149 H920"/>
 
+  <!-- One evidence bus feeds the default offline path and the optional agent path. -->
+  <path class="branch" d="M1075 186 V215 H155"/>
+  <circle class="junction" cx="775" cy="215" r="4"/>
+  <path class="line" d="M155 215 V300"/>
+  <path class="line" d="M775 215 V305"/>
+
   <text class="section" x="350" y="244">OPTIONAL BOUNDED MULTI-AGENT SYSTEM</text>
-  <rect class="frame" x="330" y="260" width="900" height="500" rx="22"/>
+  <rect class="frame" x="320" y="255" width="920" height="515" rx="22"/>
 
-  <rect class="control" x="360" y="300" width="220" height="68" rx="14"/>
-  <text class="label" x="470" y="329" text-anchor="middle">Fail-closed policy</text>
-  <text class="small" x="470" y="352" text-anchor="middle">explicit provider approval</text>
+  <rect class="control" x="350" y="290" width="220" height="68" rx="14"/>
+  <text class="label" x="460" y="319" text-anchor="middle">Fail-closed policy</text>
+  <text class="small" x="460" y="342" text-anchor="middle">explicit provider approval</text>
 
-  <rect class="control" x="360" y="395" width="220" height="82" rx="14"/>
-  <text class="label" x="470" y="424" text-anchor="middle">Execution budgets</text>
-  <text class="small" x="470" y="447" text-anchor="middle">model · tools · turns</text>
-  <text class="small" x="470" y="466" text-anchor="middle">wall clock · request time</text>
+  <rect class="control" x="350" y="376" width="220" height="68" rx="14"/>
+  <text class="label" x="460" y="404" text-anchor="middle">Execution budgets</text>
+  <text class="small" x="460" y="426" text-anchor="middle">model · tools · turns · wall clock</text>
 
-  <rect class="agent" x="660" y="300" width="240" height="78" rx="16"/>
-  <text class="label" x="780" y="333" text-anchor="middle">Coordinator</text>
-  <text class="small" x="780" y="356" text-anchor="middle">route · delegate · synthesize</text>
+  <rect class="agent" x="650" y="305" width="250" height="74" rx="16"/>
+  <text class="label" x="775" y="336" text-anchor="middle">Coordinator</text>
+  <text class="small" x="775" y="359" text-anchor="middle">route · delegate · synthesize</text>
 
-  <path class="line" d="M580 334 H660"/>
-  <path class="line" d="M580 436 H620 V354 H660"/>
-  <path class="line" d="M1075 186 V220 H780 V300"/>
+  <path class="line" d="M570 324 H650"/>
+  <path class="line" d="M570 410 H615 V360 H650"/>
 
   <rect class="agent" x="370" y="500" width="170" height="70" rx="14"/>
   <text class="label" x="455" y="531" text-anchor="middle">Scout</text>
@@ -99,24 +110,26 @@
   <text class="label" x="1085" y="531" text-anchor="middle">Recap</text>
   <text class="small" x="1085" y="553" text-anchor="middle">summarize window</text>
 
-  <path class="delegate" d="M730 378 V445 H455 V500"/>
-  <path class="delegate" d="M760 378 V465 H665 V500"/>
-  <path class="delegate" d="M800 378 V465 H875 V500"/>
-  <path class="delegate" d="M830 378 V445 H1085 V500"/>
-  <text class="edge-label" x="780" y="430" text-anchor="middle">may delegate</text>
+  <!-- A single delegation bus keeps the four role edges aligned and clear of controls. -->
+  <path class="delegate-bus" d="M775 379 V470 H455 M455 470 H1085"/>
+  <path class="delegate" d="M455 470 V500"/>
+  <path class="delegate" d="M665 470 V500"/>
+  <path class="delegate" d="M875 470 V500"/>
+  <path class="delegate" d="M1085 470 V500"/>
+  <text class="edge-label" x="792" y="459">may delegate</text>
 
   <rect class="node" x="570" y="605" width="400" height="66" rx="14"/>
   <text class="label" x="770" y="633" text-anchor="middle">Shared working memory</text>
   <text class="small" x="770" y="655" text-anchor="middle">computed facts and specialist reports for this observation</text>
 
-  <path class="line" d="M455 570 V588 H650 V605"/>
-  <path class="line" d="M665 570 V605"/>
-  <path class="line" d="M875 570 V605"/>
-  <path class="line" d="M1085 570 V588 H890 V605"/>
-  <path class="line" d="M770 605 V585 H1165 V339 H900"/>
+  <!-- Specialist reports converge from the outside in without crossing one another. -->
+  <path class="line" d="M455 570 V588 H620 V605"/>
+  <path class="line" d="M665 570 V595 H700 V605"/>
+  <path class="line" d="M875 570 V595 H840 V605"/>
+  <path class="line" d="M1085 570 V588 H920 V605"/>
 
   <rect class="node" x="380" y="700" width="215" height="64" rx="14"/>
-  <text class="label" x="487" y="727" text-anchor="middle">Candidate explanation</text>
+  <text class="label" x="487" y="727" text-anchor="middle">Coordinator synthesis</text>
   <text class="small" x="487" y="749" text-anchor="middle">claims · evidence · audiences</text>
 
   <rect class="review" x="665" y="700" width="205" height="64" rx="14"/>
@@ -127,23 +140,22 @@
   <text class="label" x="1050" y="727" text-anchor="middle">Reviewed result</text>
   <text class="small" x="1050" y="749" text-anchor="middle">supported or abstained</text>
 
-  <path class="line" d="M660 378 V676 H487 V700"/>
+  <path class="line" d="M770 671 V684 H487 V700"/>
   <path class="line" d="M595 732 H665"/>
   <path class="line" d="M870 732 H940"/>
-  <path class="reject" d="M767 700 V684 H1160 V339 H900"/>
-  <text class="edge-label" x="1030" y="680" text-anchor="middle">reject · one revision</text>
+  <path class="reject" d="M835 700 V674 H1205 V342 H900"/>
+  <text class="edge-label" x="1038" y="666" text-anchor="middle">reject · one revision</text>
 
   <rect class="node" x="40" y="320" width="230" height="72" rx="14"/>
   <text class="label" x="155" y="350" text-anchor="middle">Offline fact publisher</text>
   <text class="small" x="155" y="373" text-anchor="middle">default · no model required</text>
-  <path class="line" d="M1075 186 V216 H155 V320"/>
 
   <text class="section" x="48" y="820">DELIVERY LAYER</text>
   <rect class="output" x="430" y="790" width="420" height="72" rx="16"/>
   <text class="label" x="640" y="820" text-anchor="middle">Evidence-linked insight contract</text>
   <text class="small" x="640" y="843" text-anchor="middle">Fan and Analyst text · facts · cues · evidence IDs</text>
 
-  <path class="line" d="M155 392 V826 H430"/>
+  <path class="line" d="M155 392 V410 H300 V826 H430"/>
   <path class="line" d="M1050 764 V780 H640 V790"/>
 
   <rect class="node" x="120" y="905" width="280" height="62" rx="14"/>
