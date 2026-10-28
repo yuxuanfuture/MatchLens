@@ -1,0 +1,419 @@
+{
+  "status": "publish",
+  "claims": [
+    {
+      "kind": "observation",
+      "text": "在38–68秒窗口内，Atlas（A）对Union施加了3次压力事件，并在56秒由A7完成1次抢回球权。",
+      "evidence_ids": [
+        "p001",
+        "p002",
+        "p003",
+        "e018"
+      ],
+      "fact_ids": [
+        "f001",
+        "f002"
+      ]
+    },
+    {
+      "kind": "observation",
+      "text": "Union在该窗口的2次传球均为向后回传（e014、e015），随后A7抢回球权，A队推进后由A9于63秒完成射门，被U1扑住。",
+      "evidence_ids": [
+        "e014",
+        "e015",
+        "e018",
+        "e019",
+        "e020",
+        "e021",
+        "e022",
+        "e023"
+      ],
+      "fact_ids": [
+        "f004",
+        "f005",
+        "f003"
+      ]
+    },
+    {
+      "kind": "observation",
+      "text": "从A队抢回球权到A9射门间隔约7秒。",
+      "evidence_ids": [
+        "e018",
+        "e022"
+      ],
+      "fact_ids": [
+        "f006"
+      ]
+    },
+    {
+      "kind": "inference",
+      "text": "A队连续施压与Union两次回传在时间上相邻，但现有证据不能证明压力直接导致回传或抢回；这只是一个战术假设。",
+      "evidence_ids": [
+        "p001",
+        "p002",
+        "p003",
+        "e014",
+        "e015",
+        "e018"
+      ],
+      "fact_ids": []
+    }
+  ],
+  "fan_text": "38–68秒内Atlas连续施压3次，A7在56秒抢回球权，随后A队推进，A9于63秒射门被扑住。Union两次回传与压力时间相邻，但压力是否直接造成回传仍只是推测。",
+  "analyst_text": "在38–68秒窗口内，Atlas记录了3次压力事件（p001–p003），并在56秒由A7完成1次抢回球权（e018）；Union该窗口的2次传球均为向后回传（e014、e015）。抢回后A队经A7带球与传球、A9带球推进，于63秒由A9射门、U1扑住（e022、e023），抢回到射门间隔约7秒（f006）。压力与回传在时间上相邻，但事件顺序不能证明压力迫使回传或造成抢回，这仅为战术假设；以上均为该窗口内的计数，非全场统计。",
+  "mode": "model_harness",
+  "as_of_ms": 68000,
+  "state": {
+    "as_of_ms": 68000,
+    "match_id": "match-01",
+    "observation_scope": "excerpt",
+    "observation_window_ms": [
+      0,
+      68000
+    ],
+    "match_clock_start_ms": 3720000,
+    "time_note": "event_time_ms is relative to excerpt start, not kickoff; statistics cover the queried window only",
+    "match_clock_ms": 3788000,
+    "score": {
+      "A": 0,
+      "U": 0
+    },
+    "possession_team_id": "U",
+    "teams": [
+      {
+        "id": "A",
+        "name": "Atlas",
+        "attack_direction_x": 1,
+        "own_goal_x_m": 0,
+        "opponent_goal_x_m": 105,
+        "attacking_direction": "increasing_x"
+      },
+      {
+        "id": "U",
+        "name": "Union",
+        "attack_direction_x": -1,
+        "own_goal_x_m": 105,
+        "opponent_goal_x_m": 0,
+        "attacking_direction": "decreasing_x"
+      }
+    ],
+    "roster": [
+      {
+        "id": "A1",
+        "team_id": "A",
+        "shirt_number": 1,
+        "name": "Atlas 1"
+      },
+      {
+        "id": "A2",
+        "team_id": "A",
+        "shirt_number": 2,
+        "name": "Atlas 2"
+      },
+      {
+        "id": "A4",
+        "team_id": "A",
+        "shirt_number": 4,
+        "name": "Atlas 4"
+      },
+      {
+        "id": "A5",
+        "team_id": "A",
+        "shirt_number": 5,
+        "name": "Atlas 5"
+      },
+      {
+        "id": "A3",
+        "team_id": "A",
+        "shirt_number": 3,
+        "name": "Atlas 3"
+      },
+      {
+        "id": "A6",
+        "team_id": "A",
+        "shirt_number": 6,
+        "name": "Atlas 6"
+      },
+      {
+        "id": "A8",
+        "team_id": "A",
+        "shirt_number": 8,
+        "name": "Atlas 8"
+      },
+      {
+        "id": "A10",
+        "team_id": "A",
+        "shirt_number": 10,
+        "name": "Atlas 10"
+      },
+      {
+        "id": "A7",
+        "team_id": "A",
+        "shirt_number": 7,
+        "name": "Atlas 7"
+      },
+      {
+        "id": "A9",
+        "team_id": "A",
+        "shirt_number": 9,
+        "name": "Atlas 9"
+      },
+      {
+        "id": "A11",
+        "team_id": "A",
+        "shirt_number": 11,
+        "name": "Atlas 11"
+      },
+      {
+        "id": "U1",
+        "team_id": "U",
+        "shirt_number": 1,
+        "name": "Union 1"
+      },
+      {
+        "id": "U2",
+        "team_id": "U",
+        "shirt_number": 2,
+        "name": "Union 2"
+      },
+      {
+        "id": "U4",
+        "team_id": "U",
+        "shirt_number": 4,
+        "name": "Union 4"
+      },
+      {
+        "id": "U5",
+        "team_id": "U",
+        "shirt_number": 5,
+        "name": "Union 5"
+      },
+      {
+        "id": "U3",
+        "team_id": "U",
+        "shirt_number": 3,
+        "name": "Union 3"
+      },
+      {
+        "id": "U6",
+        "team_id": "U",
+        "shirt_number": 6,
+        "name": "Union 6"
+      },
+      {
+        "id": "U8",
+        "team_id": "U",
+        "shirt_number": 8,
+        "name": "Union 8"
+      },
+      {
+        "id": "U10",
+        "team_id": "U",
+        "shirt_number": 10,
+        "name": "Union 10"
+      },
+      {
+        "id": "U7",
+        "team_id": "U",
+        "shirt_number": 7,
+        "name": "Union 7"
+      },
+      {
+        "id": "U9",
+        "team_id": "U",
+        "shirt_number": 9,
+        "name": "Union 9"
+      },
+      {
+        "id": "U11",
+        "team_id": "U",
+        "shirt_number": 11,
+        "name": "Union 11"
+      }
+    ],
+    "current_coverage": {
+      "events": {
+        "complete": true,
+        "missing_intervals_ms": []
+      },
+      "event_positions": {
+        "complete": true,
+        "missing_intervals_ms": []
+      },
+      "tracking": {
+        "complete": true,
+        "missing_intervals_ms": []
+      },
+      "pressure": {
+        "complete": true,
+        "missing_intervals_ms": []
+      }
+    }
+  },
+  "facts": {
+    "f001": {
+      "fact_id": "f001",
+      "as_of_ms": 68000,
+      "metric": "pressure_event_count",
+      "team_id": "A",
+      "window_ms": [
+        38000,
+        68000
+      ],
+      "value": 3,
+      "unit": "count",
+      "status": "available",
+      "evidence_ids": [
+        "p001",
+        "p002",
+        "p003"
+      ],
+      "notes": [],
+      "input_coverage": {
+        "pressure": {
+          "complete": true,
+          "missing_intervals_ms": []
+        }
+      }
+    },
+    "f002": {
+      "fact_id": "f002",
+      "as_of_ms": 68000,
+      "metric": "recovery_count",
+      "team_id": "A",
+      "window_ms": [
+        38000,
+        68000
+      ],
+      "value": 1,
+      "unit": "count",
+      "status": "available",
+      "evidence_ids": [
+        "e018"
+      ],
+      "notes": [],
+      "input_coverage": {
+        "events": {
+          "complete": true,
+          "missing_intervals_ms": []
+        }
+      }
+    },
+    "f003": {
+      "fact_id": "f003",
+      "as_of_ms": 68000,
+      "metric": "shot_count",
+      "team_id": "A",
+      "window_ms": [
+        38000,
+        68000
+      ],
+      "value": 1,
+      "unit": "count",
+      "status": "available",
+      "evidence_ids": [
+        "e022"
+      ],
+      "notes": [],
+      "input_coverage": {
+        "events": {
+          "complete": true,
+          "missing_intervals_ms": []
+        }
+      }
+    },
+    "f004": {
+      "fact_id": "f004",
+      "as_of_ms": 68000,
+      "metric": "backward_pass_count",
+      "team_id": "U",
+      "window_ms": [
+        38000,
+        68000
+      ],
+      "value": 2,
+      "unit": "count",
+      "status": "available",
+      "evidence_ids": [
+        "e014",
+        "e015"
+      ],
+      "notes": [
+        "Backward means more than 1 m toward the team's own goal"
+      ],
+      "input_coverage": {
+        "events": {
+          "complete": true,
+          "missing_intervals_ms": []
+        },
+        "event_positions": {
+          "complete": true,
+          "missing_intervals_ms": []
+        }
+      }
+    },
+    "f005": {
+      "fact_id": "f005",
+      "as_of_ms": 68000,
+      "metric": "pass_count",
+      "team_id": "U",
+      "window_ms": [
+        38000,
+        68000
+      ],
+      "value": 2,
+      "unit": "count",
+      "status": "available",
+      "evidence_ids": [
+        "e014",
+        "e015"
+      ],
+      "notes": [],
+      "input_coverage": {
+        "events": {
+          "complete": true,
+          "missing_intervals_ms": []
+        }
+      }
+    },
+    "f006": {
+      "fact_id": "f006",
+      "as_of_ms": 68000,
+      "metric": "regain_to_shot_seconds",
+      "team_id": "A",
+      "window_ms": [
+        38000,
+        68000
+      ],
+      "value": 7.0,
+      "unit": "seconds",
+      "status": "available",
+      "evidence_ids": [
+        "e018",
+        "e022"
+      ],
+      "notes": [],
+      "input_coverage": {
+        "events": {
+          "complete": true,
+          "missing_intervals_ms": []
+        }
+      }
+    }
+  },
+  "usage": {
+    "model_calls": 5,
+    "tool_calls": 3,
+    "elapsed_ms": 10563,
+    "tokens": {
+      "prompt_tokens": 22185,
+      "completion_tokens": 1291,
+      "total_tokens": 23476
+    }
+  },
+  "model": {
+    "provider": "deepseek",
+    "requested": "deepseek-flash",
+    "served": "deepseek-flash"
+  }
+}

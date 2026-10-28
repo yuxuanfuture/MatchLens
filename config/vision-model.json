@@ -1,0 +1,25 @@
+{
+  "model": "YOLO11m football detector",
+  "source": "https://huggingface.co/martinjolif/yolo-football-player-detection/resolve/main/yolo-football-player-detection.pt",
+  "model_card": "https://huggingface.co/martinjolif/yolo-football-player-detection",
+  "license": "AGPL-3.0",
+  "sha256": "69c652bfa9814ef882c439617f04b8fd5749b6b8455aaa3c36110bc2e802aadd",
+  "bytes": 40583084,
+  "inference": "local process only; no hosted model API",
+  "additional_models": {
+    "football-pitch-detector.pt": {
+      "source": "https://drive.google.com/uc?id=1Ma5Kt86tgpdjCTKfum79YMgNnSjcoOyf",
+      "upstream": "https://github.com/roboflow/sports/blob/main/examples/soccer/setup.sh",
+      "sha256": "28f68f7c4056d6d9b137efd2e7ab5f3c494039380c63831649126ced25628b36",
+      "bytes": 140212306,
+      "license_notice": "Ultralytics YOLO weights from Roboflow Sports official example; retain upstream notices and review distribution terms."
+    },
+    "football-ball-detector.pt": {
+      "source": "https://drive.google.com/uc?id=1isw4wx-MK9h9LMr36VvIWlJD6ppUvw7V",
+      "upstream": "https://github.com/roboflow/sports/blob/main/examples/soccer/setup.sh",
+      "sha256": "678fbad05134f19c5094cb8d273812ec9c6691228180d46832551ecf99ed2912",
+      "bytes": 136786099,
+      "license_notice": "Ultralytics YOLO weights from Roboflow Sports official example; retain upstream notices and review distribution terms."
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.1",
+  "seed": 83,
+  "stream": "data/streams/match-day.jsonl",
+  "records": 13553,
+  "events": 2738,
+  "duration_ms": 5406580,
+  "tracking_hz": 2,
+  "sha256": "9f5b0ad1db25ee9e6e5c8c7eb46c8ca02ac95517c4c3fcb080765e3721ddd8b0",
+  "purpose": "Synthetic replay and integration tests; not training and not a calibrated professional-football distribution"
+}

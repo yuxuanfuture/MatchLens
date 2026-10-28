@@ -1,0 +1,200 @@
+{
+  "date": "2026-10-27",
+  "provider": "deepseek",
+  "model": "deepseek-flash",
+  "purpose": "development smoke tests, not held-out accuracy benchmark",
+  "selected_runs": [
+    {
+      "stream": "01",
+      "status": "publish",
+      "numeric_facts_recomputed": 6,
+      "evidence_references_valid": true,
+      "model_review_approved": true,
+      "roles": [
+        "coordinator",
+        "verifier"
+      ],
+      "protocol_retries": 0,
+      "usage": {
+        "model_calls": 5,
+        "tool_calls": 3,
+        "elapsed_ms": 10563,
+        "tokens": {
+          "prompt_tokens": 22185,
+          "completion_tokens": 1291,
+          "total_tokens": 23476
+        }
+      }
+    },
+    {
+      "stream": "02",
+      "status": "publish",
+      "numeric_facts_recomputed": 8,
+      "evidence_references_valid": true,
+      "model_review_approved": true,
+      "roles": [
+        "coordinator",
+        "verifier"
+      ],
+      "protocol_retries": 1,
+      "usage": {
+        "model_calls": 6,
+        "tool_calls": 3,
+        "elapsed_ms": 15131,
+        "tokens": {
+          "prompt_tokens": 25134,
+          "completion_tokens": 2188,
+          "total_tokens": 27322
+        }
+      }
+    },
+    {
+      "stream": "03",
+      "status": "publish",
+      "numeric_facts_recomputed": 8,
+      "evidence_references_valid": true,
+      "model_review_approved": true,
+      "roles": [
+        "coordinator",
+        "verifier"
+      ],
+      "protocol_retries": 0,
+      "usage": {
+        "model_calls": 6,
+        "tool_calls": 4,
+        "elapsed_ms": 14997,
+        "tokens": {
+          "prompt_tokens": 22019,
+          "completion_tokens": 2178,
+          "total_tokens": 24197
+        }
+      }
+    }
+  ],
+  "development_attempts": [
+    {
+      "file": "initial-02.json",
+      "status": "degraded",
+      "reason": "role_turn_budget",
+      "model_calls": 10,
+      "tokens": 51025
+    },
+    {
+      "file": "verified-01.json",
+      "status": "publish",
+      "reason": null,
+      "model_calls": 6,
+      "tokens": 24630
+    },
+    {
+      "file": "acceptance-03.json",
+      "status": "degraded",
+      "reason": "role_turn_budget",
+      "model_calls": 10,
+      "tokens": 68083
+    },
+    {
+      "file": "acceptance-02.json",
+      "status": "degraded",
+      "reason": "DeepSeek returned an invalid JSON action",
+      "model_calls": 5,
+      "tokens": 19546
+    },
+    {
+      "file": "initial-03.json",
+      "status": "degraded",
+      "reason": "role_turn_budget",
+      "model_calls": 18,
+      "tokens": 90157
+    },
+    {
+      "file": "revised-01.json",
+      "status": "publish",
+      "reason": null,
+      "model_calls": 7,
+      "tokens": 30159
+    },
+    {
+      "file": "final-03.json",
+      "status": "publish",
+      "reason": null,
+      "model_calls": 11,
+      "tokens": 54330
+    },
+    {
+      "file": "acceptance-retry-02.json",
+      "status": "publish",
+      "reason": null,
+      "model_calls": 6,
+      "tokens": 27322
+    },
+    {
+      "file": "acceptance-retry-03.json",
+      "status": "publish",
+      "reason": null,
+      "model_calls": 6,
+      "tokens": 24197
+    },
+    {
+      "file": "final-02.json",
+      "status": "degraded",
+      "reason": "role_turn_budget",
+      "model_calls": 10,
+      "tokens": 87315
+    },
+    {
+      "file": "final-01.json",
+      "status": "degraded",
+      "reason": "role_turn_budget",
+      "model_calls": 10,
+      "tokens": 90225
+    },
+    {
+      "file": "revised-03.json",
+      "status": "publish",
+      "reason": null,
+      "model_calls": 7,
+      "tokens": 28023
+    },
+    {
+      "file": "revised-02.json",
+      "status": "degraded",
+      "reason": "review_rejected_twice",
+      "model_calls": 21,
+      "tokens": 128726
+    },
+    {
+      "file": "acceptance-01.json",
+      "status": "publish",
+      "reason": null,
+      "model_calls": 5,
+      "tokens": 23476
+    },
+    {
+      "file": "verified-03.json",
+      "status": "publish",
+      "reason": null,
+      "model_calls": 6,
+      "tokens": 22563
+    },
+    {
+      "file": "verified-02.json",
+      "status": "publish",
+      "reason": null,
+      "model_calls": 9,
+      "tokens": 36824
+    },
+    {
+      "file": "initial-01.json",
+      "status": "degraded",
+      "reason": "role_turn_budget",
+      "model_calls": 18,
+      "tokens": 100954
+    }
+  ],
+  "human_review": {
+    "01": "Core facts supported; not a claim of proven pressing causality.",
+    "02": "Core counterexample is recognized. Distance wording should distinguish goalward displacement from travel distance.",
+    "03": "Missing pressure is recognized. Analyst text overclaims that Atlas is the only threatening side; zero opponent shots do not establish this. Model review missed the overclaim."
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "version": "1.0",
+  "seed": 20261027,
+  "purpose": "inference replay and evaluation; not training",
+  "duration_ms": 90000,
+  "tracking_hz": 2,
+  "cases": [
+    {
+      "stream": "data/streams/stream-01.jsonl",
+      "records": 211,
+      "events": 29,
+      "sha256": "61dd947ce1ec60ba288d8e0c223bd7a86bae76c25d01d55bc0e2a3cc36904c0e"
+    },
+    {
+      "stream": "data/streams/stream-02.jsonl",
+      "records": 208,
+      "events": 26,
+      "sha256": "f91520d0183410644ddb92650626427708e1e269dc668afc592d96fa18da8d71"
+    },
+    {
+      "stream": "data/streams/stream-03.jsonl",
+      "records": 210,
+      "events": 26,
+      "sha256": "e4c520cd8979dbb5a5467e20279d54f44757353c31b46ad60d20d0f7ade7da75"
+    }
+  ]
+}

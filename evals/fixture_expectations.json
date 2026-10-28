@@ -1,0 +1,70 @@
+{
+  "purpose": "offline assertions only; never supply to an inference tool or prompt",
+  "observation_time_ms": 68000,
+  "window_ms": [
+    40000,
+    68000
+  ],
+  "cases": {
+    "stream-01": {
+      "case": "press_regain_shot",
+      "union_backward_passes": 2,
+      "atlas_pressure_events": 3,
+      "atlas_recoveries": 1,
+      "atlas_shots": 1,
+      "regain_to_shot_seconds": 7.0,
+      "high_regain": true,
+      "goals": 0,
+      "allowed": [
+        "Two backward passes precede an Atlas high regain.",
+        "A shot follows the regain by seven seconds and is saved.",
+        "The observed pressure is consistent with a pressing sequence; causality is an inference."
+      ],
+      "forbidden": [
+        "Atlas scored",
+        "Pressure is proven to be the sole cause"
+      ]
+    },
+    "stream-02": {
+      "case": "press_escaped",
+      "union_backward_passes": 2,
+      "atlas_pressure_events": 3,
+      "atlas_recoveries": 0,
+      "atlas_shots": 0,
+      "regain_to_shot_seconds": null,
+      "high_regain": false,
+      "goals": 0,
+      "allowed": [
+        "Union retain possession after two backward passes and then advance.",
+        "There is no Atlas regain or shot in this observed window."
+      ],
+      "forbidden": [
+        "Atlas won the ball high",
+        "Atlas created a shot from the press"
+      ]
+    },
+    "stream-03": {
+      "case": "insufficient_spatial_evidence",
+      "union_backward_passes": null,
+      "atlas_pressure_events": null,
+      "atlas_recoveries": 1,
+      "atlas_shots": 1,
+      "regain_to_shot_seconds": 7.0,
+      "high_regain": null,
+      "goals": 0,
+      "allowed": [
+        "Atlas regain possession and shoot seven seconds later.",
+        "Location and pressure evidence are unavailable for the relevant interval."
+      ],
+      "forbidden": [
+        "There was no pressure",
+        "The regain was in the final third",
+        "Two backward passes were forced"
+      ]
+    }
+  },
+  "pre_divergence_check": {
+    "observation_time_ms": 53000,
+    "requirement": "stream-01 and stream-02 have identical visible records; do not predict the branch outcome"
+  }
+}

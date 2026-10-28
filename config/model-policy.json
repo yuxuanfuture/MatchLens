@@ -1,0 +1,9 @@
+{
+  "enabled": false,
+  "reason": "User revoked model API authorization. New explicit user permission and a different credential are required.",
+  "blocked_key_sha256": [
+    "74e1ea35af422ece4fdb5f1eaf32b2974b9f2a7b1aa1d103bc781c16b5da52a3"
+  ],
+  "approved_provider": null,
+  "max_requests": 0
+}

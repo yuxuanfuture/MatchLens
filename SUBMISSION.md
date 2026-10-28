@@ -1,39 +1,84 @@
-# MatchLens Live — Submission Draft
+# MatchLens Pocket Stadium — submission overview
 
 ## Elevator pitch
 
-MatchLens Live transforms synthetic football events into explainable, personalized match intelligence that is ready to sit alongside a live broadcast. Instead of reporting only what happened, it identifies meaningful shifts in pressure, transition, shape, and momentum; explains why each moment matters; grounds every narrative in event-level evidence; and adapts the same intelligence for analysts, casual fans, favourite teams, individual players, and multiple languages.
+MatchLens transforms synthetic football events into evidence-linked match
+intelligence and a personalized miniature stadium. It explains why a moment matters,
+keeps uncertainty visible, and renders the same observed facts as concise fan
+storytelling or quantified analyst insight in five languages.
 
-## The problem
+## What we built
 
-Live football produces a constant stream of events, but raw events and statistics do not automatically become a story. Broadcasters and streaming platforms need timely context without sacrificing accuracy, while different fans need different levels of depth.
+MatchLens provides one end-to-end pipeline:
 
-## The solution
+1. **Ingest** synthetic passes, shots, tackles, possession changes, tracking
+   samples, match metadata, and VAR decisions as arrival-ordered events.
+2. **Interpret** the observed interval into deterministic football states and
+   statistics without reading future events.
+3. **Explain** pressure changes, transitions, chances, and decisions with explicit
+   evidence identifiers and limitations.
+4. **Render** a synchronized miniature stadium, timed JSON overlay, transparent
+   broadcast view, animated commentator, and replay-aware recap.
+5. **Personalize** language, role, club, player, metric, and draggable module layout
+   so fans and analysts receive genuinely different presentations of the same facts.
 
-MatchLens Live implements one end-to-end pipeline:
+The primary demo is a 120-second added-time sequence containing a clean tackle,
+counterattack, one-on-one finish, offside flag, VAR review, and confirmed goal. The
+score and celebration change only when the final decision becomes observable.
 
-1. Replays synthetic, football-realistic events as a live feed.
-2. Calculates match state, pressure, possession, expected goals, and momentum.
-3. Detects moments that materially change the match.
-4. Produces claim-level evidence and an explainable narrative.
-5. Renders synchronized broadcast overlays.
-6. Personalizes depth, focus, and language for each viewer.
+## Agentic design
 
-## Microsoft technology
+The optional inference harness uses six specialized roles: coordinator, scout,
+tactics, verifier, audience, and recap. Roles share frozen evidence, use bounded
+tools, hand work to one another, and require independent review before publication.
+Global request, tool, turn, and wall-clock budgets prevent runaway execution.
+Results from an old seek, preference state, or evidence window are discarded.
 
-The product is designed around Microsoft Foundry and Microsoft Agent Framework. The production pipeline separates signal analysis, tactical context, audience adaptation, and factual verification into distinct agent responsibilities with shared structured state. Azure Functions or Azure Container Apps provide the low-latency API layer, with telemetry captured in Application Insights.
+The checked-in demo runs in deterministic offline mode, so judges can inspect the
+complete product without an API key. Optional DeepSeek and local Ollama adapters are
+present behind an explicit fail-closed authorization policy. Offline templates are
+not represented as live model output.
 
-> Final submission note: replace this paragraph with the exact deployed services and model names after the Foundry endpoint is connected and verified.
+## Microsoft and GitHub technology used
 
-## Why it is different
+- Public GitHub repository for inspectable source and history.
+- GitHub Actions for reproducible offline validation on every push and pull request.
+- GitHub CLI for repository publication and release verification.
 
-MatchLens treats explainability as part of the viewer experience. Every on-screen claim is accompanied by the underlying metrics or event reference, while deterministic calculations remain separate from narrative generation. The same match moment can therefore become a dense tactical explanation for an analyst or a clear, emotional story for a casual fan without changing the facts.
+The runtime orchestration is custom. Microsoft Foundry, Microsoft Agent Framework,
+and Azure are not integrated in this version and are not claimed.
 
-## Category
+## Technical implementation
 
-Best Multi-Agent System
+- Python 3.13 local event service and standard-library HTTP/SSE transport.
+- SQLite journals for local stories and persistent model-request budgets.
+- Canvas-based browser renderer with no frontend build step.
+- Deterministic synthetic datasets and arrival-time validators.
+- Optional local PyTorch, Ultralytics, OpenCV, BoT-SORT, and pitch calibration path.
+- English, Chinese, French, Spanish, and Arabic interfaces.
+- Transparent overlay and machine-readable timed JSON export.
 
-## Data disclosure
+## Run and verify
 
-All match data, teams, players, scores, events, and metrics shown in the demo are synthetic and fictional. The project contains no broadcast footage, club marks, player likenesses, or copyrighted music.
+```bash
+python3 -m backend.server --port 43128
+python3 scripts/offline_acceptance.py
+```
 
+Open `http://127.0.0.1:43128/?lang=en`. The repository README contains Windows
+instructions, optional vision setup, the soundtrack policy, known limitations, and
+the third-party notices.
+
+## Boundaries
+
+- All match data, clubs, players, events, and scores are fictional and synthetic.
+- No Premier League footage, official feed, club marks, or production partnership is
+  included or claimed.
+- The optional video path is preprocessing rather than demonstrated real-time
+  broadcast inference; broad event-recall accuracy is not claimed.
+- The source repository omits third-party recordings, generated soundtrack bytes,
+  model weights, and machine-specific virtual environments.
+- Model quality and live latency are not claimed without a separately authorized
+  evaluation run.
+
+Repository: <https://github.com/yuxuanfuture/MatchLens>

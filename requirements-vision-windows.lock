@@ -1,0 +1,4 @@
+# Python 3.13 on Windows. Keep the original macOS lock unchanged.
+-r requirements-vision.lock
+# tqdm's Windows-only dependency.
+colorama==0.4.6
