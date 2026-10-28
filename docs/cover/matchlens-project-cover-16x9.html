@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1920, initial-scale=1">
+  <title>MatchLens Pocket Stadium — Project Cover</title>
+  <style>
+    @font-face {
+      font-family: "Nunito MatchLens";
+      src: url("../../dist/assets/nunito-900.ttf") format("truetype");
+      font-weight: 900;
+      font-style: normal;
+      font-display: block;
+    }
+
+    * { box-sizing: border-box; }
+
+    html,
+    body {
+      width: 1920px;
+      height: 1080px;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    body {
+      position: relative;
+      color: #123f33;
+      background: #8cd7ff;
+      font-family: "Nunito MatchLens", "Microsoft YaHei UI", "Microsoft YaHei", sans-serif;
+    }
+
+    .background,
+    .wash,
+    .grain {
+      position: absolute;
+      inset: 0;
+    }
+
+    .background {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    .wash {
+      background:
+        linear-gradient(90deg,
+          rgba(221, 245, 255, 0.93) 0%,
+          rgba(226, 247, 255, 0.82) 19%,
+          rgba(230, 248, 255, 0.42) 34%,
+          rgba(231, 248, 255, 0.08) 47%,
+          rgba(231, 248, 255, 0) 58%);
+    }
+
+    .grain {
+      opacity: 0.13;
+      mix-blend-mode: soft-light;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90' viewBox='0 0 90 90'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.22'/%3E%3C/svg%3E");
+    }
+
+    main {
+      position: absolute;
+      z-index: 2;
+      left: 88px;
+      top: 76px;
+      width: 700px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 26px;
+    }
+
+    .brand-mark {
+      width: 98px;
+      height: 98px;
+      flex: 0 0 auto;
+      filter: drop-shadow(0 6px 13px rgba(53, 92, 41, 0.16));
+    }
+
+    .brand-mark path {
+      fill: none;
+      stroke: #79aa31;
+      stroke-width: 6.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    h1 {
+      margin: 0;
+      letter-spacing: -4.5px;
+      line-height: 0.89;
+      text-shadow:
+        0 2px 0 rgba(255, 255, 255, 0.44),
+        0 12px 36px rgba(238, 255, 245, 0.48);
+    }
+
+    h1 .primary {
+      display: block;
+      font-size: 106px;
+      white-space: nowrap;
+    }
+
+    h1 .secondary {
+      display: block;
+      margin-top: 18px;
+      color: #245b48;
+      font-size: 50px;
+      letter-spacing: -1.8px;
+    }
+
+    .tagline {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin: 56px 0 0 4px;
+      color: #143f34;
+      font-family: "Microsoft YaHei UI", "Microsoft YaHei", sans-serif;
+      font-size: 46px;
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -1.2px;
+      text-shadow: 0 3px 20px rgba(247, 255, 248, 0.8);
+      white-space: nowrap;
+    }
+
+    .tagline .dot {
+      color: #f46c4c;
+      font-family: "Nunito MatchLens", sans-serif;
+      font-size: 56px;
+      line-height: 0;
+    }
+
+    .rule {
+      width: 132px;
+      height: 9px;
+      margin: 34px 0 31px 5px;
+      border-radius: 10px;
+      background: linear-gradient(90deg, #f46c4c 0 64%, #f9bd42 64% 100%);
+      box-shadow: 0 4px 12px rgba(209, 83, 47, 0.19);
+    }
+
+    .hackathon {
+      display: inline-flex;
+      align-items: center;
+      min-height: 58px;
+      padding: 13px 24px 14px;
+      border: 1px solid rgba(20, 63, 52, 0.15);
+      border-radius: 22px;
+      color: #234b3e;
+      background: rgba(255, 249, 231, 0.91);
+      box-shadow:
+        0 7px 0 rgba(93, 99, 77, 0.09),
+        0 17px 40px rgba(30, 77, 63, 0.13);
+      font-size: 22px;
+      letter-spacing: 0.1px;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+  <img class="background" src="./matchlens-cover-background.png" alt="">
+  <div class="wash"></div>
+  <div class="grain"></div>
+  <main>
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 64 64" aria-hidden="true">
+        <path d="M32 6 54 18.5v27L32 58 10 45.5v-27L32 6Z"></path>
+        <path d="m10 18.5 22 13 22-13M32 31.5V58"></path>
+      </svg>
+      <h1>
+        <span class="primary">MatchLens</span>
+        <span class="secondary">Pocket Stadium</span>
+      </h1>
+    </div>
+    <p class="tagline"><span>看见比赛</span><span class="dot">·</span><span>理解为什么</span></p>
+    <div class="rule"></div>
+    <div class="hackathon">Microsoft Inside the Game Developer Hackathon</div>
+  </main>
+</body>
+</html>
