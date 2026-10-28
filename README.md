@@ -6,10 +6,24 @@ MatchLens turns observed football events into evidence-linked explanations and a
 personalized miniature stadium. The same facts become concise storytelling for fans,
 quantified context for analysts, and synchronized cues for broadcast overlays.
 
-https://github.com/user-attachments/assets/7c19dc86-b2b1-4d1c-8126-0246e06f65e4
+## Two ways to run
 
-The default demo is fully offline: no API key, model download, npm install, or
-frontend build is required.
+MatchLens is a runnable evidence and agent framework, not only a rendered product
+walkthrough.
+
+| Mode | What runs |
+| --- | --- |
+| **Offline** | Deterministic event processing, analytics, evidence, replay, localization, and UI. No model or API key is required. |
+| **API-backed multi-agent** | DeepSeek or local Ollama drives the Coordinator and optional specialist roles; deterministic tools remain the source of numerical facts, and an independent Verifier reviews each candidate. |
+
+Both modes use the same frozen observation window, evidence contract, Pocket Stadium,
+and stale-result checks. A model can investigate and explain the match, but it cannot
+invent records, advance the replay clock, or bypass the configured request budget.
+
+**Product walkthrough — the video shows the offline path; the same interface accepts
+reviewed agent output when a provider is enabled:**
+
+https://github.com/user-attachments/assets/7c19dc86-b2b1-4d1c-8126-0246e06f65e4
 
 ## Why MatchLens
 
@@ -34,7 +48,7 @@ overlay.
 - **Portable demo:** the main experience runs locally with Python and a modern
   browser, without a frontend build step.
 
-## Quick start
+## Quick start: offline
 
 Requirements: Python 3.13 and a modern browser. Node.js 22 is needed only for the
 browser-side test suite.
@@ -53,6 +67,22 @@ powershell -ExecutionPolicy Bypass -File .\start-matchlens-windows.ps1
 
 Open <http://127.0.0.1:43128/?lang=en>. The local service must remain running because
 it provides the event stream, evidence APIs, and replay controls.
+
+## Connect a model provider
+
+The repository includes adapters for the official DeepSeek API and a loopback Ollama
+service. The checked-in policy intentionally fails closed, so adding a key alone does
+not make a request. To activate API-backed investigations:
+
+1. Configure the provider locally: keep a DeepSeek key in the Git-ignored
+   `.env.local`, or start an Ollama model on `127.0.0.1`.
+2. Create an explicit, bounded provider grant in `config/model-policy.json`.
+3. Start the server for continuous event-batched investigations, or run
+   `scripts/run_harness.py` against a frozen stream snapshot.
+
+See **[Model API setup](docs/MODEL_API_SETUP.md)** for working DeepSeek and Ollama
+commands, the policy fields, budget behavior, and shutdown steps. Secrets never enter
+the browser, prompts, traces, or committed files.
 
 ## Demo
 
@@ -104,6 +134,7 @@ path on every push and pull request.
 ## Documentation
 
 - [Multi-agent design](docs/HARNESS_PLAN.zh-CN.md)
+- [Model API setup](docs/MODEL_API_SETUP.md)
 - [Event stream and broadcast overlay](docs/STREAM_AND_OVERLAY.md)
 - [Synthetic data contract](data/README.md)
 - [Offline acceptance guide](docs/OFFLINE_ACCEPTANCE.zh-CN.md)
