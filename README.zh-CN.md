@@ -16,7 +16,7 @@ https://github.com/user-attachments/assets/7c19dc86-b2b1-4d1c-8126-0246e06f65e4
   <a href="https://yuxuanfuture.github.io/MatchLens/">▶ 打开可交互 Demo</a>
 </h3>
 
-<p align="center">使用浏览器即可操作合成比赛场景，不需要服务器或 API 密钥。</p>
+<p align="center">直接操作视频中的口袋球场：回放比赛、切换受众与语言、自由排列面板。不需要服务器或 API 密钥。</p>
 
 [![CI](https://github.com/yuxuanfuture/MatchLens/actions/workflows/ci.yml/badge.svg)](https://github.com/yuxuanfuture/MatchLens/actions/workflows/ci.yml)
 

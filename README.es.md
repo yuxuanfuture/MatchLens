@@ -17,7 +17,7 @@ https://github.com/user-attachments/assets/7c19dc86-b2b1-4d1c-8126-0246e06f65e4
   <a href="https://yuxuanfuture.github.io/MatchLens/">▶ Abrir la demo interactiva</a>
 </h3>
 
-<p align="center">Funciona en el navegador con escenarios sintéticos, sin servidor ni clave de API.</p>
+<p align="center">Usa el Pocket Stadium mostrado arriba: repetición, audiencia, idioma y disposición de paneles. No requiere servidor ni clave de API.</p>
 
 [![CI](https://github.com/yuxuanfuture/MatchLens/actions/workflows/ci.yml/badge.svg)](https://github.com/yuxuanfuture/MatchLens/actions/workflows/ci.yml)
 

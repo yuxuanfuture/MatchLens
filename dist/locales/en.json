@@ -113,6 +113,7 @@
   "status.load_failed": "The stadium could not load. Please refresh to try again.",
   "status.connecting": "Connecting to the local event stream…",
   "status.offline": "Offline fact mode",
+  "status.demo": "Interactive browser demo",
   "status.agent": "Agent commentary",
   "status.locked": "Model API locked",
   "status.authorized": "Model authorized",

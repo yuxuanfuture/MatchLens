@@ -113,6 +113,7 @@
   "status.load_failed": "球场未能加载，请刷新重试。",
   "status.connecting": "连接本地事件流…",
   "status.offline": "离线事实模式",
+  "status.demo": "浏览器交互演示",
   "status.agent": "智能体解说",
   "status.locked": "模型接口已锁定",
   "status.authorized": "模型已授权",

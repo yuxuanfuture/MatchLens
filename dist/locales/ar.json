@@ -113,6 +113,7 @@
   "status.load_failed": "تعذر تحميل الملعب. حدّث الصفحة للمحاولة مجددًا.",
   "status.connecting": "جارٍ الاتصال بالأحداث المحلية…",
   "status.offline": "وضع الحقائق دون اتصال",
+  "status.demo": "عرض تفاعلي في المتصفح",
   "status.agent": "تعليق الوكيل",
   "status.locked": "واجهة النموذج مقفلة",
   "status.authorized": "النموذج مصرح به",

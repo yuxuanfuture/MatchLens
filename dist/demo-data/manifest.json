@@ -1,0 +1,1 @@
+{"schema_version":"matchlens.static-demo/1.0","stream":"stream-04","languages":["en","zh","fr","es","ar"],"interval_ms":500,"duration_ms":120000,"receive_offset_ms":80,"snapshots":241,"source_sha256":"f329c126e3c4c6e8ade5c85ffd78fdfa06c262f9cda60a1d502ffa27a6d1d67d"}

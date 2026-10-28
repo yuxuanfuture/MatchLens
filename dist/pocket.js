@@ -1,6 +1,7 @@
 import { clamp } from './matches.js';
 import {t, language, applyTranslations, errorText, displayName} from './i18n.js';
 import { LiveClient, toSnapshot } from './live-client.js';
+import { StaticDemoClient, staticDemoEnabled } from './static-demo-client.js';
 import { StadiumRenderer } from './pocket-renderer.js?v=goal-celebration';
 import { REPLAY_STREAMS, playbackView, receiveTime, evidenceVisible } from './replay-view.js';
 import { ReplayCrowdAudio } from './crowd-audio.js';
@@ -29,7 +30,9 @@ const renderer = new StadiumRenderer($('stadium'));
 const celebrationUI = new GoalCelebrationUI();
 const commentator = new CommentatorPortrait($('animated-commentator'));
 const crowdAudio=new ReplayCrowdAudio({enabled:preferences.crowdAudio!==false,onStatus:refreshCrowdAudio});
-const client=new LiveClient(value=>{payload=value;state.time=playbackView(value).position_ms/1000;state.playing=value.playing;crowdAudio.update(value);updateUI();},message=>{crowdAudio.disconnect();toast(message);},{translate:t});
+const demoMode=staticDemoEnabled();
+const Client=demoMode?StaticDemoClient:LiveClient;
+const client=new Client(value=>{payload=value;state.time=playbackView(value).position_ms/1000;state.playing=value.playing;crowdAudio.update(value);updateUI();},message=>{crowdAudio.disconnect();toast(message);},{translate:t});
 function refreshCrowdAudio(){
   const button=$('crowd-audio-button');
   button.setAttribute('aria-pressed',String(crowdAudio.enabled));
@@ -137,7 +140,7 @@ function updateUI() {
   status.textContent=view.ended?t('review.ended'):phase!=='none'?t(`review.${phase}.title`):payload.playback?t('review.added_time',{minutes:Math.floor(view.announced_added_time_ms/60000)}):'';
   const playKey=payload.playing?'ui.pause':'ui.play';$('play-button').setAttribute('data-i18n-aria-label',playKey);$('play-button').setAttribute('aria-label',t(playKey));$('play-button').innerHTML=`<i class="ph-bold ph-${payload.playing?'pause':'play'}" aria-hidden="true"></i>`;
   $('scene-label').textContent=t('status.received',{stream:payload.stream,count:payload.received_records});
-  const mode=t(payload.mode==='model_harness'?'status.agent':'status.offline');
+  const mode=t(payload.source_mode==='static_demo'?'status.demo':payload.mode==='model_harness'?'status.agent':'status.offline');
   $('runtime-status').textContent=mode+' · '+t(payload.policy.enabled?'status.authorized':'status.locked')+(payload.tracking_available?'':' · '+t('status.missing'));
   $('chapter-a').textContent=payload.playback?t('ui.playback_progress',{position:clock(view.position_ms),duration:clock(view.duration_ms)}):t('ui.observed_only');$('chapter-b').textContent=story.window_label;$('chapter-c').textContent=t('ui.evidence_linked');
   const windowLabel=document.createElement('bdi');windowLabel.dir='ltr';windowLabel.textContent=story.window_label;$('commentary-kicker').replaceChildren(document.createTextNode(mode+' · '),windowLabel);
@@ -217,6 +220,7 @@ $('export-overlay').addEventListener('click',()=>{if(payload)download({schema_ve
 $('export-recap').addEventListener('click',async()=>{try{download(await client.recap(),'matchlens-recap.json');}catch(error){toast(errorText(error));}});
 for(const [id,key] of [['language-select','language'],['team-select','focus_team'],['metric-select','metric']])$(id).value=audience[key];
 $('broadcast').onclick=()=>{if(client.id)window.open(`./overlay.html?session=${client.id}&mode=${state.mode}&lang=${language()}`,'_blank','noopener');};
+if(demoMode){$('broadcast').hidden=true;document.querySelector('.runtime-bar a[href="./sources.html"]').hidden=true;}
 const attached=new URLSearchParams(location.search).get('session');
 if(attached)client.attach(attached).then(()=>{Object.assign(audience,client.current.preferences,{language:language()});state.mode=audience.mode;setMode(state.mode,false);client.control({preferences:audiencePrefs()});}).catch(e=>toast(errorText(e)));else setScene(state.scene);
 

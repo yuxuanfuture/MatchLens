@@ -17,7 +17,7 @@ https://github.com/user-attachments/assets/7c19dc86-b2b1-4d1c-8126-0246e06f65e4
   <a href="https://yuxuanfuture.github.io/MatchLens/">▶ افتح العرض التفاعلي</a>
 </h3>
 
-<p align="center">يعمل في المتصفح بسيناريوهات اصطناعية، من دون خادم أو مفتاح API.</p>
+<p align="center">شغّل Pocket Stadium الظاهر أعلاه: أعد المباراة وغيّر الجمهور واللغة ورتّب اللوحات، من دون خادم أو مفتاح API.</p>
 
 [![CI](https://github.com/yuxuanfuture/MatchLens/actions/workflows/ci.yml/badge.svg)](https://github.com/yuxuanfuture/MatchLens/actions/workflows/ci.yml)
 

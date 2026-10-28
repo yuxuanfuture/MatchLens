@@ -113,6 +113,7 @@
   "status.load_failed": "No se pudo cargar el estadio. Actualiza la página.",
   "status.connecting": "Conectando con los eventos locales…",
   "status.offline": "Modo de hechos sin conexión",
+  "status.demo": "Demo interactiva en el navegador",
   "status.agent": "Comentario del agente",
   "status.locked": "API del modelo bloqueada",
   "status.authorized": "Modelo autorizado",

@@ -113,6 +113,7 @@
   "status.load_failed": "Le stade n’a pas pu être chargé. Actualisez la page.",
   "status.connecting": "Connexion aux événements locaux…",
   "status.offline": "Mode factuel hors ligne",
+  "status.demo": "Démo interactive dans le navigateur",
   "status.agent": "Commentaire de l’agent",
   "status.locked": "API du modèle verrouillée",
   "status.authorized": "Modèle autorisé",
