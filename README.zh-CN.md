@@ -12,6 +12,10 @@
 
 https://github.com/user-attachments/assets/7c19dc86-b2b1-4d1c-8126-0246e06f65e4
 
+<h3 align="center">
+  <a href="https://yuxuanfuture.github.io/MatchLens/">▶ 打开 Live Demo</a>
+</h3>
+
 [![CI](https://github.com/yuxuanfuture/MatchLens/actions/workflows/ci.yml/badge.svg)](https://github.com/yuxuanfuture/MatchLens/actions/workflows/ci.yml)
 
 MatchLens 将已观测到的足球事件转化为带证据引用的解释和个性化微型球场。同一组事实可以成为面向球迷的简明故事、面向分析师的量化背景，以及与时间轴同步的转播图层提示。

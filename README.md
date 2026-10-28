@@ -13,6 +13,10 @@ use the same interface.**
 
 https://github.com/user-attachments/assets/7c19dc86-b2b1-4d1c-8126-0246e06f65e4
 
+<h3 align="center">
+  <a href="https://yuxuanfuture.github.io/MatchLens/">▶ Open Live Demo</a>
+</h3>
+
 [![CI](https://github.com/yuxuanfuture/MatchLens/actions/workflows/ci.yml/badge.svg)](https://github.com/yuxuanfuture/MatchLens/actions/workflows/ci.yml)
 
 MatchLens turns observed football events into evidence-linked explanations and a

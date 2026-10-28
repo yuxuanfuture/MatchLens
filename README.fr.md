@@ -13,6 +13,10 @@
 
 https://github.com/user-attachments/assets/7c19dc86-b2b1-4d1c-8126-0246e06f65e4
 
+<h3 align="center">
+  <a href="https://yuxuanfuture.github.io/MatchLens/">▶ Ouvrir la Live Demo</a>
+</h3>
+
 [![CI](https://github.com/yuxuanfuture/MatchLens/actions/workflows/ci.yml/badge.svg)](https://github.com/yuxuanfuture/MatchLens/actions/workflows/ci.yml)
 
 MatchLens transforme les événements de football observés en explications reliées à leurs preuves et en un stade miniature personnalisé. Les mêmes faits deviennent un récit concis pour les supporters, un contexte quantifié pour les analystes et des signaux synchronisés pour les incrustations de diffusion.

@@ -13,6 +13,10 @@
 
 https://github.com/user-attachments/assets/7c19dc86-b2b1-4d1c-8126-0246e06f65e4
 
+<h3 align="center">
+  <a href="https://yuxuanfuture.github.io/MatchLens/">▶ افتح العرض المباشر</a>
+</h3>
+
 [![CI](https://github.com/yuxuanfuture/MatchLens/actions/workflows/ci.yml/badge.svg)](https://github.com/yuxuanfuture/MatchLens/actions/workflows/ci.yml)
 
 يحوّل MatchLens أحداث كرة القدم المرصودة إلى تفسيرات مرتبطة بالأدلة وإلى ملعب مصغّر مخصّص. تتحول الحقائق نفسها إلى سرد موجز للمشجعين، وسياق كمي للمحللين، وإشارات متزامنة لطبقات البث.
