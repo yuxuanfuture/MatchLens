@@ -70,7 +70,7 @@ The product does not require a model to run. When the fail-closed model policy i
 explicitly enabled, the same frozen evidence tools can be used by a bounded
 multi-agent investigation system:
 
-![MatchLens multi-agent system architecture](docs/architecture/multi-agent-system-v2.svg)
+![MatchLens multi-agent system architecture](docs/architecture/multi-agent-system-v3.svg)
 
 Only the coordinator may delegate. Every non-empty candidate receives an independent
 review, all numerical claims must come from deterministic tools, and results from an
