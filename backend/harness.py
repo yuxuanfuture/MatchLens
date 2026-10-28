@@ -350,9 +350,9 @@ class Harness:
                   + "\n" + final_contract(role)
                   + "\nAvailable tools: " + json.dumps(TOOL_GUIDE)
                   + "\nAvailable specialists: " + json.dumps([r for r in self.roles if r != "coordinator"]))
-        language_names = {"zh": "Chinese", "en": "English", "fr": "French", "es": "Spanish", "ar": "Arabic"}
-        language = self.preferences.get("language", "zh")
-        system += "\nWrite all viewer-facing text in " + language_names.get(language, "Chinese") + " (" + language + "). Preserve original identities, numbers and evidence IDs."
+        language_names = {"en": "English", "zh": "Simplified Chinese", "fr": "French", "es": "Spanish", "ar": "Arabic"}
+        language = self.preferences.get("language", "en")
+        system += "\nWrite all viewer-facing text in " + language_names.get(language, "English") + " (" + language + "). Preserve original identities, numbers and evidence IDs."
         context = {"task": task, "preferences": self.preferences,
                    "observation": self.snapshot.get_match_state(),
                    "investigation_window_ms": [0 if self.kind == 'recap' else max(0, self.snapshot.as_of_ms - 30000), self.snapshot.as_of_ms],
@@ -439,7 +439,7 @@ class Harness:
         if kind not in {'story', 'recap'}:
             raise ValueError('Unknown investigation kind')
         self.kind = kind
-        self.preferences = copy.deepcopy(preferences or {"language": "zh", "focus_team": "A"})
+        self.preferences = copy.deepcopy(preferences or {"language": "en", "focus_team": "A"})
         try:
             if kind == 'recap' and 'recap' in self.roles:
                 report = self._agent('recap', task + ' Gather the recap context, milestones and player context before reporting.')

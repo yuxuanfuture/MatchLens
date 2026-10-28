@@ -9,7 +9,7 @@ from backend.i18n import LANGUAGES, text, display_name
 from backend.review_state import review_state, confirmed_goal_cues, presentation_evidence
 
 
-DEFAULTS = {"language": "zh", "mode": "fan", "role": "fan", "focus_team": "A",
+DEFAULTS = {"language": "en", "mode": "fan", "role": "fan", "focus_team": "A",
             "focus_player": None, "metric": "overview"}
 
 

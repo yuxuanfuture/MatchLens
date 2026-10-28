@@ -10,10 +10,14 @@ from backend.insights import publish, recap
 from backend.server import AppServer
 
 ROOT = Path(__file__).resolve().parents[1]
-LANGUAGES = ('zh', 'en', 'fr', 'es', 'ar')
+LANGUAGES = ('en', 'zh', 'fr', 'es', 'ar')
 
 
 class LocalizationTests(unittest.TestCase):
+    def test_default_language_is_english(self):
+        tools = FixtureStream(ROOT / 'data/streams/stream-01.jsonl').snapshot(68000)
+        self.assertEqual(publish(tools)['preferences']['language'], 'en')
+
     def test_http_language_switch_preserves_time_role_and_evidence(self):
         server = AppServer(('127.0.0.1', 0))
         thread = threading.Thread(target=server.serve_forever, daemon=True)

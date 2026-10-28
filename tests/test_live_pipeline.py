@@ -67,7 +67,7 @@ class StreamTests(unittest.TestCase):
         results = [publish(FixtureStream(ROOT / f"data/streams/stream-{i:02}.jsonl").snapshot(68000)) for i in range(1,4)]
         self.assertEqual(results[0]["story"]["topic"], "transition")
         self.assertEqual(results[1]["story"]["topic"], "pressure")
-        self.assertIn("数据缺口", results[2]["story"]["analyst_text"])
+        self.assertIn("Coverage gaps", results[2]["story"]["analyst_text"])
         missing = publish(FixtureStream(ROOT / "data/streams/stream-03.jsonl").snapshot(58000))
         self.assertFalse(missing["tracking_available"])
         self.assertIsNone(missing["facts"]["speeds"]["ball_speed_mps"])

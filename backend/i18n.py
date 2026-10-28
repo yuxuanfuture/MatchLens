@@ -4,7 +4,7 @@ import re
 from functools import lru_cache
 from pathlib import Path
 
-LANGUAGES = ('zh', 'en', 'fr', 'es', 'ar')
+LANGUAGES = ('en', 'zh', 'fr', 'es', 'ar')
 CATALOGS = Path(__file__).resolve().parents[1] / 'dist' / 'locales'
 
 

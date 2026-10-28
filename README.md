@@ -1,5 +1,13 @@
 # MatchLens Pocket Stadium
 
+<p align="center">
+  <strong>English</strong> ·
+  <a href="README.zh-CN.md">简体中文</a> ·
+  <a href="README.fr.md">Français</a> ·
+  <a href="README.es.md">Español</a> ·
+  <a href="README.ar.md">العربية</a>
+</p>
+
 [![CI](https://github.com/yuxuanfuture/MatchLens/actions/workflows/ci.yml/badge.svg)](https://github.com/yuxuanfuture/MatchLens/actions/workflows/ci.yml)
 
 MatchLens turns observed football events into evidence-linked explanations and a
@@ -31,9 +39,9 @@ Football data is easy to count but hard to explain. MatchLens keeps each claim t
 to the event or tracking records that support it, respects what was observable at
 that moment, and exposes uncertainty instead of filling gaps with invented facts.
 
-The interface adapts one evidence stream for Fan and Analyst modes, five languages,
-followed teams or players, a replayable Pocket Stadium, and a transparent broadcast
-overlay.
+The interface adapts one evidence stream for Fan and Analyst modes, English by
+default plus Simplified Chinese, French, Spanish, and Arabic, followed teams or
+players, a replayable Pocket Stadium, and a transparent broadcast overlay.
 
 ## Highlights
 

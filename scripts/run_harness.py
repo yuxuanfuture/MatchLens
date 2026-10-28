@@ -22,7 +22,7 @@ def main():
     parser.add_argument("--provider", choices=["offline", "ollama", "deepseek"], default="offline")
     parser.add_argument("--model", help="Model identifier; DeepSeek defaults to deepseek-flash")
     parser.add_argument("--base-url", help="Provider URL; defaults to its official or local endpoint")
-    parser.add_argument("--language", choices=["zh", "en"], default="zh")
+    parser.add_argument("--language", choices=["en", "zh", "fr", "es", "ar"], default="en")
     parser.add_argument("--focus-team", default="A")
     parser.add_argument("--focus-player")
     parser.add_argument("--task", default="Investigate the recent visible play. Decide what matters and why; produce grounded Fan and Analyst explanations, or abstain when appropriate.")
