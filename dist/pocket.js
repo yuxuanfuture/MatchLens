@@ -5,6 +5,8 @@ import { StadiumRenderer } from './pocket-renderer.js?v=goal-celebration';
 import { REPLAY_STREAMS, playbackView, receiveTime, evidenceVisible } from './replay-view.js';
 import { ReplayCrowdAudio } from './crowd-audio.js';
 import { GoalCelebrationUI } from './goal-celebration-ui.js';
+import { commentatorPose } from './commentator-state.js';
+import { CommentatorPortrait } from './commentator-avatar.js';
 
 const $ = id => document.getElementById(id);
 const moduleNames = ['slogan','commentary','notebook'];
@@ -25,6 +27,7 @@ const requestedScene=new URLSearchParams(location.search).get('scene');
 const state = {scene:streams.includes(requestedScene)?requestedScene:streams[0],time:0,playing:false,mode:preferences.mode,role:preferences.role,arranging:false};
 const renderer = new StadiumRenderer($('stadium'));
 const celebrationUI = new GoalCelebrationUI();
+const commentator = new CommentatorPortrait($('animated-commentator'));
 const crowdAudio=new ReplayCrowdAudio({enabled:preferences.crowdAudio!==false,onStatus:refreshCrowdAudio});
 const client=new LiveClient(value=>{payload=value;state.time=playbackView(value).position_ms/1000;state.playing=value.playing;crowdAudio.update(value);updateUI();},message=>{crowdAudio.disconnect();toast(message);},{translate:t});
 function refreshCrowdAudio(){
@@ -200,6 +203,7 @@ function frame(now){
   presentationElapsed=payload===animationPayload?Math.min(.5,presentationElapsed+delta):0;animationPayload=payload;
   const snapshot=toSnapshot(payload,displayName,presentationElapsed);
   renderer.render(snapshot,state.mode,delta);
+  commentator.render(commentatorPose(payload,{elapsed:presentationElapsed,reduced:renderer.reduced}));
   celebrationUI.render(snapshot.celebration,{reduced:renderer.reduced,
     time:snapshot.time+(payload?.playing?presentationElapsed*(payload.speed||1):0),reviewPhase:payload?.review?.phase});
   requestAnimationFrame(frame);

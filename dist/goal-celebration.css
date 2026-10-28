@@ -9,10 +9,10 @@
 #goal-score{background:#a93625;color:#fff9db;padding:3px 12px;border-radius:10px;white-space:nowrap}
 #goal-celebration[data-team=blue] .goal-announcement{color:#176da7}
 #goal-celebration[data-team=blue] #goal-score{background:#176da7}
-.cheering-commentator{display:none}
+.animated-commentator{display:none}
+.commentary-module[data-portrait-ready] img.commentator{display:none}
+.commentary-module[data-portrait-ready] .animated-commentator{display:block}
 .commentary-module[data-celebrating]{transform:translateY(var(--goal-lift,0px));border-color:#edbc52;background:linear-gradient(115deg,#fff3c9,#fff9eb 65%);box-shadow:0 0 0 3px #ffd66a80,0 0 calc(15px + var(--goal-glow,0)*25px) #edb24c66,0 7px 0 #e4d3b55c;transition:none}
-.commentary-module[data-celebrating] img.commentator{display:none}
-.commentary-module[data-celebrating] .cheering-commentator{display:block}
 .commentary-module[data-celebrating] #commentary-title{color:#a93625}
 .commentary-module[data-celebrating] #commentary-body{color:#684f2d;font-weight:900}
 #score{transform-origin:center;display:inline-block}

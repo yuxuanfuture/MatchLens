@@ -6,6 +6,8 @@ export function goalCelebration(payload, formatName = value => value, elapsed = 
   const view = playbackView(payload), review = payload.review;
   const phase = review?.phase ?? 'none';
   if (!['none','pending','awarded'].includes(phase)) return null;
+  // Presentation interpolation may pass a future ruling's timestamp, but cannot receive it.
+  if (phase !== 'none' && !(review.observed_at_ms <= payload.as_of_ms)) return null;
   const records = [...(payload.events ?? []), ...(payload.evidence_records ?? [])];
   const goal = records.filter(event => event.type === 'goal' && event.observed_at_ms <= payload.as_of_ms
     && (phase !== 'awarded' || review.evidence_ids?.includes(event.id)))
