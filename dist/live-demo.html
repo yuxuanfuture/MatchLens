@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Operate a browser-based MatchLens dashboard with synthetic football scenarios, evidence traces, and audience controls."
+    />
+    <title>MatchLens — Interactive Dashboard Demo</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="ambient ambient-one"></div>
+    <div class="ambient ambient-two"></div>
+
+    <main class="app-shell">
+      <header class="app-header">
+        <div class="brand-lockup">
+          <div class="brand-mark" aria-hidden="true">
+            <span></span><span></span><span></span><span></span>
+          </div>
+          <div>
+            <div class="eyebrow">INTERACTIVE SYNTHETIC MATCH DEMO</div>
+            <h1>MatchLens <em>Live</em></h1>
+          </div>
+        </div>
+
+        <div class="header-center" aria-label="Data source status">
+          <span class="live-dot"></span>
+          <strong>BROWSER DEMO</strong>
+          <span id="event-rate">1.0× EVENT RATE</span>
+        </div>
+
+        <div class="header-actions">
+          <div class="confidence-pill">
+            <span>GROUNDING</span>
+            <strong id="grounding-score">98%</strong>
+          </div>
+          <button class="icon-button" id="fullscreen-button" aria-label="Enter full screen" title="Full screen">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5" />
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <section class="scenario-strip" aria-label="Demo scenarios">
+        <div class="scenario-title">
+          <span>SCENE</span>
+          <strong id="scene-number">01 / 03</strong>
+        </div>
+        <div id="scenario-tabs" class="scenario-tabs"></div>
+        <button id="director-button" class="director-button">
+          <span class="director-icon">●</span>
+          AUTO DIRECTOR
+        </button>
+      </section>
+
+      <section class="workspace-grid">
+        <div class="stage-card">
+          <div class="score-ribbon">
+            <div class="competition-label">SYNTHETIC MATCH • DEMO FEED</div>
+            <div class="scoreboard">
+              <div class="team team-home">
+                <span id="home-name">Northbridge FC</span>
+                <i id="home-color"></i>
+              </div>
+              <strong id="home-score">0</strong>
+              <div class="match-clock" id="match-clock">62:04</div>
+              <strong id="away-score">0</strong>
+              <div class="team team-away">
+                <i id="away-color"></i>
+                <span id="away-name">Riverside Athletic</span>
+              </div>
+            </div>
+            <div class="viewer-badge" id="viewer-badge">ANALYST VIEW</div>
+          </div>
+
+          <div class="pitch-wrap">
+            <div class="stadium-light stadium-light-left"></div>
+            <div class="stadium-light stadium-light-right"></div>
+            <svg id="pitch" class="pitch" viewBox="0 0 1050 680" role="img" aria-label="Animated synthetic football match">
+              <defs>
+                <linearGradient id="pitchGradient" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#143d35" />
+                  <stop offset="55%" stop-color="#0d2e2a" />
+                  <stop offset="100%" stop-color="#09211f" />
+                </linearGradient>
+                <filter id="playerShadow" x="-70%" y="-70%" width="240%" height="240%">
+                  <feDropShadow dx="0" dy="7" stdDeviation="6" flood-color="#000" flood-opacity=".65" />
+                </filter>
+                <filter id="ballGlow" x="-150%" y="-150%" width="400%" height="400%">
+                  <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="#d7ff4b" flood-opacity=".9" />
+                </filter>
+                <marker id="arrowhead" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto">
+                  <polygon points="0 0, 7 3.5, 0 7" fill="#d7ff4b" />
+                </marker>
+              </defs>
+
+              <rect x="15" y="15" width="1020" height="650" rx="18" fill="url(#pitchGradient)" />
+              <g class="mowing-lines" opacity=".28">
+                <rect x="15" y="15" width="102" height="650" />
+                <rect x="219" y="15" width="102" height="650" />
+                <rect x="423" y="15" width="102" height="650" />
+                <rect x="627" y="15" width="102" height="650" />
+                <rect x="831" y="15" width="102" height="650" />
+              </g>
+
+              <g class="pitch-lines">
+                <rect x="15" y="15" width="1020" height="650" rx="18" />
+                <line x1="525" y1="15" x2="525" y2="665" />
+                <circle cx="525" cy="340" r="91" />
+                <circle cx="525" cy="340" r="5" class="filled" />
+                <rect x="15" y="145" width="170" height="390" />
+                <rect x="15" y="245" width="64" height="190" />
+                <circle cx="126" cy="340" r="5" class="filled" />
+                <path d="M185 267 A91 91 0 0 1 185 413" />
+                <rect x="865" y="145" width="170" height="390" />
+                <rect x="971" y="245" width="64" height="190" />
+                <circle cx="924" cy="340" r="5" class="filled" />
+                <path d="M865 267 A91 91 0 0 0 865 413" />
+                <path d="M15 45 A30 30 0 0 0 45 15M1005 15 A30 30 0 0 0 1035 45M15 635 A30 30 0 0 1 45 665M1005 665 A30 30 0 0 1 1035 635" />
+              </g>
+
+              <line id="event-trail" class="event-trail" x1="525" y1="340" x2="525" y2="340" marker-end="url(#arrowhead)" />
+              <g id="pressure-zone" class="pressure-zone">
+                <ellipse cx="525" cy="340" rx="90" ry="65" />
+              </g>
+              <g id="players-layer"></g>
+              <g id="ball" class="ball" filter="url(#ballGlow)">
+                <ellipse cx="0" cy="9" rx="13" ry="7" fill="#000" opacity=".4" />
+                <circle cx="0" cy="0" r="9" fill="#fff" />
+                <path d="M-3-4 3-4 6 1 0 5-6 1Z" fill="#1b2524" opacity=".8" />
+              </g>
+            </svg>
+
+            <div class="camera-label">
+              <span>CAM 01</span>
+              <strong>TACTICAL WIDE</strong>
+            </div>
+
+            <article class="insight-overlay" id="insight-overlay">
+              <div class="insight-topline">
+                <div class="insight-kicker">
+                  <span class="pulse-icon"></span>
+                  <span id="insight-kicker">MATCH SIGNAL</span>
+                </div>
+                <div class="confidence-value"><span id="insight-confidence">98</span>% CONFIDENCE</div>
+              </div>
+              <h2 id="insight-headline">Pressure is building on Riverside's right side</h2>
+              <p id="insight-copy">Northbridge have forced three backward passes in 28 seconds and moved their regain line 11 metres higher.</p>
+              <div class="evidence-row" id="evidence-row"></div>
+            </article>
+          </div>
+
+          <div class="stage-footer">
+            <div class="playback-controls">
+              <button class="play-button" id="play-button" aria-label="Play scenario">
+                <svg class="play-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" /></svg>
+                <svg class="pause-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z" /></svg>
+              </button>
+              <button class="reset-button" id="reset-button">RESET</button>
+            </div>
+            <div class="timeline-wrap">
+              <div class="timeline-track"><div id="timeline-progress" class="timeline-progress"></div></div>
+              <div class="timeline-labels"><span id="timeline-current">00:00</span><span id="timeline-total">00:18</span></div>
+            </div>
+            <div class="speed-control" id="speed-control">
+              <button data-speed="0.75">0.75×</button>
+              <button data-speed="1" class="active">1×</button>
+              <button data-speed="1.5">1.5×</button>
+            </div>
+          </div>
+        </div>
+
+        <aside class="intelligence-rail">
+          <section class="rail-card view-card">
+            <div class="card-heading">
+              <div>
+                <span class="section-label">PERSONALIZED OUTPUT</span>
+                <h3>Audience lens</h3>
+              </div>
+              <span class="adaptive-badge">ADAPTIVE</span>
+            </div>
+            <div class="segmented-control" id="audience-control">
+              <button data-audience="analyst" class="active">Analyst</button>
+              <button data-audience="fan">Fan</button>
+            </div>
+            <div class="preference-row">
+              <label>
+                <span>Focus</span>
+                <select id="focus-select">
+                  <option value="match">Whole match</option>
+                  <option value="home">Home team</option>
+                  <option value="player">Player 09</option>
+                </select>
+              </label>
+              <label>
+                <span>Language</span>
+                <select id="language-select">
+                  <option value="en">English</option>
+                  <option value="zh">中文</option>
+                </select>
+              </label>
+            </div>
+          </section>
+
+          <section class="rail-card pulse-card">
+            <div class="card-heading compact">
+              <div>
+                <span class="section-label">MATCH STATE</span>
+                <h3>Momentum pulse</h3>
+              </div>
+              <strong id="momentum-value">+18</strong>
+            </div>
+            <svg class="momentum-chart" viewBox="0 0 360 104" aria-label="Live momentum chart">
+              <defs>
+                <linearGradient id="momentumFill" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#d7ff4b" stop-opacity=".5" />
+                  <stop offset="100%" stop-color="#d7ff4b" stop-opacity="0" />
+                </linearGradient>
+              </defs>
+              <line x1="0" y1="52" x2="360" y2="52" class="zero-line" />
+              <path id="momentum-area" class="momentum-area" d="M0 52 L360 52 L360 104 L0 104Z" />
+              <polyline id="momentum-line" class="momentum-line" points="0,52" />
+            </svg>
+            <div class="stat-grid">
+              <div><span>POSSESSION</span><strong id="possession-stat">52—48</strong></div>
+              <div><span>xG</span><strong id="xg-stat">0.00—0.00</strong></div>
+              <div><span>PRESSURE</span><strong id="pressure-stat">MED</strong></div>
+            </div>
+          </section>
+
+          <section class="rail-card trace-card">
+            <div class="card-heading compact">
+              <div>
+                <span class="section-label">EXPLAINABLE PIPELINE</span>
+                <h3>Evidence trace</h3>
+              </div>
+              <span class="trace-id" id="trace-id">TRC-6204</span>
+            </div>
+            <div class="agent-steps">
+              <div class="agent-step done" data-agent="signal">
+                <span>01</span><div><strong>Signal detector</strong><small>Detect meaningful change</small></div><i></i>
+              </div>
+              <div class="agent-step active" data-agent="context">
+                <span>02</span><div><strong>Context builder</strong><small>Compare match state</small></div><i></i>
+              </div>
+              <div class="agent-step" data-agent="audience">
+                <span>03</span><div><strong>Audience adapter</strong><small>Adapt depth & language</small></div><i></i>
+              </div>
+              <div class="agent-step" data-agent="verify">
+                <span>04</span><div><strong>Evidence verifier</strong><small>Ground every claim</small></div><i></i>
+              </div>
+            </div>
+          </section>
+
+          <section class="rail-card feed-card">
+            <div class="card-heading compact">
+              <div>
+                <span class="section-label">INGESTION</span>
+                <h3>Event stream</h3>
+              </div>
+              <span class="stream-status"><i></i> LIVE</span>
+            </div>
+            <div id="event-feed" class="event-feed" aria-live="polite"></div>
+          </section>
+        </aside>
+      </section>
+
+      <footer class="app-footer">
+        <div><span class="footer-dot"></span> STATIC BROWSER DEMO • SYNTHETIC DATA • NO API CALLS</div>
+        <div>INGEST → INTERPRET → EXPLAIN → RENDER → PERSONALIZE</div>
+        <div>RECORDING SAFE • 16:9</div>
+      </footer>
+    </main>
+
+    <script src="./data/scenarios.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>

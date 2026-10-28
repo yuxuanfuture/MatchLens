@@ -14,8 +14,10 @@ conectados a una API utilizan la misma interfaz.**
 https://github.com/user-attachments/assets/7c19dc86-b2b1-4d1c-8126-0246e06f65e4
 
 <h3 align="center">
-  <a href="https://yuxuanfuture.github.io/MatchLens/">▶ Abrir la Live Demo</a>
+  <a href="https://yuxuanfuture.github.io/MatchLens/">▶ Abrir la demo interactiva</a>
 </h3>
+
+<p align="center">Funciona en el navegador con escenarios sintéticos, sin servidor ni clave de API.</p>
 
 [![CI](https://github.com/yuxuanfuture/MatchLens/actions/workflows/ci.yml/badge.svg)](https://github.com/yuxuanfuture/MatchLens/actions/workflows/ci.yml)
 
