@@ -8,6 +8,11 @@
   <a href="README.ar.md">العربية</a>
 </p>
 
+**Watch MatchLens — the walkthrough shows the offline experience; API-backed agents
+use the same interface.**
+
+https://github.com/user-attachments/assets/7c19dc86-b2b1-4d1c-8126-0246e06f65e4
+
 [![CI](https://github.com/yuxuanfuture/MatchLens/actions/workflows/ci.yml/badge.svg)](https://github.com/yuxuanfuture/MatchLens/actions/workflows/ci.yml)
 
 MatchLens turns observed football events into evidence-linked explanations and a
@@ -27,11 +32,6 @@ walkthrough.
 Both modes use the same frozen observation window, evidence contract, Pocket Stadium,
 and stale-result checks. A model can investigate and explain the match, but it cannot
 invent records, advance the replay clock, or bypass the configured request budget.
-
-**Product walkthrough — the video shows the offline path; the same interface accepts
-reviewed agent output when a provider is enabled:**
-
-https://github.com/user-attachments/assets/7c19dc86-b2b1-4d1c-8126-0246e06f65e4
 
 ## Why MatchLens
 

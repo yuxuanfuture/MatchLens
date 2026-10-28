@@ -8,6 +8,10 @@
   <a href="README.ar.md">العربية</a>
 </p>
 
+**观看 MatchLens——视频展示离线体验；接入 API 的多 Agent 系统使用同一套界面。**
+
+https://github.com/user-attachments/assets/7c19dc86-b2b1-4d1c-8126-0246e06f65e4
+
 [![CI](https://github.com/yuxuanfuture/MatchLens/actions/workflows/ci.yml/badge.svg)](https://github.com/yuxuanfuture/MatchLens/actions/workflows/ci.yml)
 
 MatchLens 将已观测到的足球事件转化为带证据引用的解释和个性化微型球场。同一组事实可以成为面向球迷的简明故事、面向分析师的量化背景，以及与时间轴同步的转播图层提示。
@@ -22,10 +26,6 @@ MatchLens 是一个可以实际运行的证据与 Agent 框架，而不只是一
 | **API 多 Agent 模式** | DeepSeek 或本地 Ollama 驱动 Coordinator 与按需参与的专业角色；确定性工具仍是数字事实来源，独立 Verifier 会审核每个候选结果。 |
 
 两种模式共用冻结的观察窗口、证据契约、口袋球场和过期结果检查。模型可以调查并解释比赛，但不能虚构记录、推进回放时钟或绕过请求预算。
-
-**产品演示——视频展示离线路径；启用模型提供方后，同一界面可以接收已审核的 Agent 输出：**
-
-https://github.com/user-attachments/assets/7c19dc86-b2b1-4d1c-8126-0246e06f65e4
 
 ## 为什么需要 MatchLens
 

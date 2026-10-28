@@ -8,6 +8,11 @@
   <a href="README.ar.md">العربية</a>
 </p>
 
+**Voir MatchLens — la vidéo présente l’expérience hors ligne ; les agents connectés
+à une API utilisent la même interface.**
+
+https://github.com/user-attachments/assets/7c19dc86-b2b1-4d1c-8126-0246e06f65e4
+
 [![CI](https://github.com/yuxuanfuture/MatchLens/actions/workflows/ci.yml/badge.svg)](https://github.com/yuxuanfuture/MatchLens/actions/workflows/ci.yml)
 
 MatchLens transforme les événements de football observés en explications reliées à leurs preuves et en un stade miniature personnalisé. Les mêmes faits deviennent un récit concis pour les supporters, un contexte quantifié pour les analystes et des signaux synchronisés pour les incrustations de diffusion.
@@ -22,10 +27,6 @@ MatchLens est un framework exécutable de preuves et d’agents, pas seulement u
 | **Multi-agent avec API** | DeepSeek ou un Ollama local pilote le Coordinator et les rôles spécialisés facultatifs ; les outils déterministes restent la source des faits numériques et un Verifier indépendant contrôle chaque proposition. |
 
 Les deux modes partagent la même fenêtre d’observation figée, le même contrat de preuve, le Pocket Stadium et les contrôles de péremption. Un modèle peut enquêter et expliquer le match, mais il ne peut ni inventer des données, ni avancer l’horloge du replay, ni contourner le budget de requêtes.
-
-**Présentation du produit — la vidéo montre le parcours hors ligne ; la même interface reçoit les résultats validés des agents lorsqu’un fournisseur est activé :**
-
-https://github.com/user-attachments/assets/7c19dc86-b2b1-4d1c-8126-0246e06f65e4
 
 ## Pourquoi MatchLens
 
