@@ -2,6 +2,8 @@
 
 [![CI](https://github.com/yuxuanfuture/MatchLens/actions/workflows/ci.yml/badge.svg)](https://github.com/yuxuanfuture/MatchLens/actions/workflows/ci.yml)
 
+![MatchLens Pocket Stadium title page](docs/cover/titlepage.png)
+
 MatchLens turns synthetic football events into evidence-linked match intelligence
 and a personalized miniature stadium. It ingests events as they arrive, derives
 deterministic football metrics, explains why a moment matters, renders synchronized
