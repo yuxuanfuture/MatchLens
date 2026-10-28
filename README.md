@@ -2,9 +2,9 @@
 
 [![CI](https://github.com/yuxuanfuture/MatchLens/actions/workflows/ci.yml/badge.svg)](https://github.com/yuxuanfuture/MatchLens/actions/workflows/ci.yml)
 
-[![Watch the MatchLens Pocket Stadium demo](docs/cover/titlepage.png)](https://raw.githubusercontent.com/yuxuanfuture/MatchLens/main/docs/video/MatchLens_Pocket_Stadium_EN_Subtitled.mp4)
+[![Watch the MatchLens Pocket Stadium demo](docs/cover/titlepage.png)](https://yuxuanfuture.github.io/MatchLens/watch.html)
 
-▶ [Watch the English-subtitled demo video (MP4, 21 MB)](https://raw.githubusercontent.com/yuxuanfuture/MatchLens/main/docs/video/MatchLens_Pocket_Stadium_EN_Subtitled.mp4)
+▶ [Watch the English-subtitled demo video](https://yuxuanfuture.github.io/MatchLens/watch.html)
 
 MatchLens turns synthetic football events into evidence-linked match intelligence
 and a personalized miniature stadium. It ingests events as they arrive, derives
